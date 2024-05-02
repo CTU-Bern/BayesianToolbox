@@ -1,2 +1,2 @@
-# BayesianCTApproaches
+# Bayesian Toolbox
  
