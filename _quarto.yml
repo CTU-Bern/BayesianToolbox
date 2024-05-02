@@ -13,6 +13,7 @@ book:
     - index.qmd
     - 01-Chapter1.qmd
     - 02-Chapter2.qmd
+    - references.qmd
 
 format:
   html:
