@@ -1,0 +1,30 @@
+project:
+  type: book
+  output-dir: docs
+
+editor: source
+bibliography: references.bib
+csl: plos-one.csl
+
+book:
+  title: "Bayesian Toolbox"
+  search: false
+  chapters:
+    - index.qmd
+    - 01-Chapter1.qmd
+    - 02-Chapter2.qmd
+
+format:
+  html:
+    css: styles.css
+    toc-location: left
+    toc-depth: 4  
+    grid:
+      sidebar-width: 300px
+      body-width: 800px
+      margin-width: 450px
+    theme: cosmo
+    linestretch: 2
+    code-fold: true
+    code-summary: "Show R code"
+    title-block-banner: true

@@ -1,0 +1,8 @@
+.quarto-title-block .quarto-title-banner {
+  background-image: url(Logo/logo_unibern_squid3.png);
+  background-size: 150px;
+  background-position: right;
+  background-repeat: no-repeat;
+  padding-left: -200px;
+  background-origin: content-box;
+}
