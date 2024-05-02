@@ -18,6 +18,7 @@ book:
 format:
   html:
     css: styles.css
+    html-math-method: mathjax
     toc-location: left
     toc-depth: 4  
     grid:
