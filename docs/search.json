@@ -24,7 +24,7 @@
     "href": "index.html",
     "title": "Bayesian Toolbox",
     "section": "",
-    "text": "1 Introduction\nThis is the CTU Bayes",
+    "text": "1 Introduction\nThis is the CTU Bern Bayesian Toolbox.",
     "crumbs": [
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
@@ -37,6 +37,16 @@
     "text": "2.1 Background",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Chapter 1</span>"
+    ]
+  },
+  {
+    "objectID": "index.html#general-notation-and-abbreviations",
+    "href": "index.html#general-notation-and-abbreviations",
+    "title": "Bayesian Toolbox",
+    "section": "1.1 General notation and abbreviations",
+    "text": "1.1 General notation and abbreviations\n\niid: Independent and identically distributed.\npdf: Probability density function. Most often denoted as \\(f(\\cdot)\\). For bivariate pdf we use the notation \\(f_2(\\cdot)\\).\ncdf: Cumulative distribution function. Most often denoted as \\(F(\\cdot)\\). For bivariate pdf we use the notation \\(F_2(\\cdot)\\).\n\\(N_2\\): Bivariate cdf of the Gaussian distribution.\n\\(\\phi\\): pdf of the standard Gaussian distribution.\n\\(\\Phi\\): cdf of the standard Gaussian distribution.\n\\(\\Phi^{-1}\\): Quantile function of the standard Gaussian distribution function.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
     ]
   }
 ]

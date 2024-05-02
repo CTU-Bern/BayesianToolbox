@@ -1,3 +1,13 @@
 # Introduction
 
-This is the CTU Bayes
+This is the CTU Bern Bayesian Toolbox.
+
+## General notation and abbreviations
+
+-   iid: Independent and identically distributed.
+-   pdf: Probability density function. Most often denoted as $f(\cdot)$. For bivariate pdf we use the notation $f_2(\cdot)$.
+-   cdf: Cumulative distribution function. Most often denoted as $F(\cdot)$. For bivariate pdf we use the notation $F_2(\cdot)$.
+-   $N_2$: Bivariate cdf of the Gaussian distribution.
+-   $\phi$: pdf of the standard Gaussian distribution.
+-   $\Phi$: cdf of the standard Gaussian distribution.
+-   $\Phi^{-1}$: Quantile function of the standard Gaussian distribution function.
