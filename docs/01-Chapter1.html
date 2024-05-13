@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bayesian Toolbox - 2&nbsp; Chapter 1</title>
+<title>Bayesian Toolbox - 2&nbsp; ABLATIO-BILICA</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,7 +54,26 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -87,6 +106,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -100,7 +148,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-Chapter1.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 1</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-Chapter1.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ABLATIO-BILICA</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -110,7 +158,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 1</span></h1>
+      <h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ABLATIO-BILICA</span></h1>
                       </div>
   </div>
     
@@ -142,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-Chapter1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Chapter 1</span></span></a>
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">ABLATIO-BILICA</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -163,7 +211,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background"><span class="header-section-number">2.1</span> Background</a></li>
+  <li><a href="#abbreviations" id="toc-abbreviations" class="nav-link active" data-scroll-target="#abbreviations"><span class="header-section-number">2.1</span> Abbreviations</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">2.2</span> Methods</a>
+  <ul>
+  <li><a href="#study-intervention" id="toc-study-intervention" class="nav-link" data-scroll-target="#study-intervention"><span class="header-section-number">2.2.1</span> Study intervention</a></li>
+  <li><a href="#primary-endpoint" id="toc-primary-endpoint" class="nav-link" data-scroll-target="#primary-endpoint"><span class="header-section-number">2.2.2</span> Primary endpoint</a></li>
+  <li><a href="#sample-size" id="toc-sample-size" class="nav-link" data-scroll-target="#sample-size"><span class="header-section-number">2.2.3</span> Sample size</a></li>
+  <li><a href="#study-design" id="toc-study-design" class="nav-link" data-scroll-target="#study-design"><span class="header-section-number">2.2.4</span> Study design</a></li>
+  <li><a href="#statistical-methods" id="toc-statistical-methods" class="nav-link" data-scroll-target="#statistical-methods"><span class="header-section-number">2.2.5</span> Statistical methods</a>
+  <ul class="collapse">
+  <li><a href="#design-prior-choice" id="toc-design-prior-choice" class="nav-link" data-scroll-target="#design-prior-choice"><span class="header-section-number">2.2.5.1</span> Design prior choice</a></li>
+  <li><a href="#analysis-prior-choice" id="toc-analysis-prior-choice" class="nav-link" data-scroll-target="#analysis-prior-choice"><span class="header-section-number">2.2.5.2</span> Analysis prior choice</a></li>
+  </ul></li>
+  <li><a href="#simulation-study" id="toc-simulation-study" class="nav-link" data-scroll-target="#simulation-study"><span class="header-section-number">2.2.6</span> Simulation study</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">2.3</span> Results</a></li>
+  <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   </ul>
 </nav>
 </nav>
@@ -178,23 +241,349 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="background" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="background"><span class="header-section-number">2.1</span> Background</h2>
+<p>The <strong>ABLATIO-BILICA trial</strong> is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (<span class="citation" data-cites="Lee2008">[<a href="references.html#ref-Lee2008" role="doc-biblioref">1</a>]</span>, <span class="citation" data-cites="Sambucini2021">[<a href="references.html#ref-Sambucini2021" role="doc-biblioref">2</a>]</span>). The ABLATIO-BILICA trial aims to evaluate the safety of biliary intraductal radiofrequency ablation (bRFA) in patients with unresectable extrahepatic biliary tract cancer (EBTC) undergoing standard of care chemo-immune checkpoint inhibitor-therapy (CICI). It is a multicenter two-arm randomized controlled study.</p>
+<p>We quantify the following trial operations characteristics: Probability of stopping because of non-safety (stopping trial before is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.</p>
+<section id="abbreviations" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="abbreviations"><span class="header-section-number">2.1</span> Abbreviations</h2>
+<ul>
+<li>AE: Adverse event</li>
+<li>bRFA: Biliary intraductal radiofrequency ablation</li>
+<li>CD: Chemotherapy discontinuation</li>
+<li>CICI: Chemo-immune checkpoint inhibitor-therapy</li>
+<li>EBTC: Extrahepatic biliary tract cancer</li>
+</ul>
+</section>
+<section id="methods" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="methods"><span class="header-section-number">2.2</span> Methods</h2>
+<section id="study-intervention" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="study-intervention"><span class="header-section-number">2.2.1</span> Study intervention</h3>
+<p><strong>Control arm</strong>: Chemotherapy, durvalumab and endoscopic stenting.</p>
+<p><strong>Experimental arm</strong>: Chemotherapy, durvalumab, endoscopic stenting plus intraductal bRFA.</p>
+</section>
+<section id="primary-endpoint" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="primary-endpoint"><span class="header-section-number">2.2.2</span> Primary endpoint</h3>
+<p>The primary endpoint is any grade 3 or 4 adverse event (AE) leading to chemotherapy discontinuation up to six months after randomization. AE are assessed by the US National Cancer Institute Common Terminology Criteria for Adverse Events (CTCAE v5).</p>
+</section>
+<section id="sample-size" class="level3" data-number="2.2.3">
+<h3 data-number="2.2.3" class="anchored" data-anchor-id="sample-size"><span class="header-section-number">2.2.3</span> Sample size</h3>
+<p>The sample size was fixed to <span class="math inline">\(N_{max}=36\)</span> patients (24 patients in the experimental arm, 12 patients in the control arm) because of feasibility.</p>
+</section>
+<section id="study-design" class="level3" data-number="2.2.4">
+<h3 data-number="2.2.4" class="anchored" data-anchor-id="study-design"><span class="header-section-number">2.2.4</span> Study design</h3>
+<p>The following figure summarises the trial design. Suppose we randomise patients with a 2:1 allocation ratio to the experimental arm and the control arm. Let <span class="math inline">\(p_i\)</span> be the CD proportion coming from a design prior <span class="math inline">\(\pi^d_i \sim Beta(a^d_i,b^d_i)\)</span>, <span class="math inline">\(p_i\)</span>, <span class="math inline">\(i=0,1\)</span>. The design prior represents the uncertainty of <span class="math inline">\(p_i\)</span> at the design stage and might be different from the analysis prior. One interim analysis will be performed after the recruitment of <span class="math inline">\(N^{I}=n_{0}+n_{1}=18\)</span> patients (<span class="math inline">\(n_{0}\)</span> denotes the number of patients in the control arm and <span class="math inline">\(n_{1}\)</span> denotes the number of patients in the experimental arm; The index <span class="math inline">\(I\)</span> stands for ‘interim’) which corresponds to 50% of the fixed sample size.</p>
 <div class="cell">
-<details class="code-fold">
-<summary>Show R code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="01-Chapter1_files/figure-html/chunk1-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="01-Chapter1_files/figure-html/fig1-1.png" class="img-fluid figure-img" width="768"></p>
 </figure>
 </div>
 </div>
 </div>
+</section>
+<section id="statistical-methods" class="level3" data-number="2.2.5">
+<h3 data-number="2.2.5" class="anchored" data-anchor-id="statistical-methods"><span class="header-section-number">2.2.5</span> Statistical methods</h3>
+<p>Suppose that at the interim analysis <strong>in the experimental arm</strong> <span class="math inline">\(r_{1}\)</span> discontinuation events are observed. If we assume that <span class="math inline">\(N_{max}=n_{max, 0}+n_{max, 1}\)</span> is the planned sample size of the trial, then a remaining future <span class="math inline">\(m_{1}=n_{max, 1}-n_{1}\)</span> will be recruited in the experimental arm with possible future events <span class="math inline">\(S_1\in\{0,\cdots, m_1\}\)</span>. Note that at each interim analysis the posterior distribution is Beta-distributed <span class="math inline">\(p_i|r_i,n_i \sim Beta(a_i+r_i, b_i+n_i-r_i)\)</span> and <span class="math inline">\(S_1|r_1,n_1\)</span> is Beta-binomial distributed <span class="math inline">\(S_1 \sim Betabinomal(m_1, a+r_1, b+n_1-r_1)\)</span>.</p>
+<p>The trial is stopped early if <span class="math inline">\(PP&gt;\theta_{S}\)</span>, for an upper discontinuation proportion threshold <span class="math inline">\(p_{max}\)</span>, <span class="math display">\[
+\begin{aligned}
+PP&amp;=E\left[I\left\{ P\left(p_1&gt;p_{max}|r_{1}, n_{1}, s_{1}\right)&gt;\theta_{T_{Non-safe}}\right\}|r_{1}, n_{1}\right] \\
+&amp;=\sum_{s_1=0}^{m_1} I(P(p_1 &gt; p_{max}|r_{1},n_1,s_1)&gt;\theta_{T_{Non-safe}}) P(S_{1}=s_1|r_{1}, n_1).
+\end{aligned}
+\]</span> That is, we stop the trial early if there is a high predictive probability <span class="math inline">\(\Theta_S\)</span> that the discontinuation proportion in the experimental arm exceeds a upper threshold <span class="math inline">\(p_{max}\)</span> given interim data and future events, otherwise the remaining 18 patients are randomised until the fixed sample size is reached.</p>
+<p>Stopping boundaries are calculated for each combination of <span class="math inline">\(r_1\)</span> (and thus <span class="math inline">\(m_1\)</span>) given the maximal sample size <span class="math inline">\(N_{max}\)</span> and the interim sample size <span class="math inline">\(N^I\)</span>. The tibble below shows the example of <span class="math inline">\(r_1=2\)</span> and <span class="math inline">\(n_1=12\)</span> for the skeptical prior. We set <span class="math inline">\(\theta_{T_{Non-safe}}=0.6\)</span>.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>p_max <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.2</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Prior information</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>prior_type <span class="ot">&lt;-</span> <span class="st">"Skeptical"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>a_1 <span class="ot">&lt;-</span> <span class="fl">2.4</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>b_1 <span class="ot">&lt;-</span> <span class="fl">9.6</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.001</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>n_initial <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n_initial</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>n_increase <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>n_max <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">seq</span>(n_initial, n_max, n_increase)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n_max</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> n_max<span class="sc">-</span>r</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="do">#### Scenario</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>theta_T <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">n=</span>n, <span class="at">r=</span>r) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(n) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n<span class="sc">&gt;=</span>r) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">i=</span>n_max<span class="sc">-</span>n<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">expandRows</span>(data, <span class="at">count=</span><span class="dv">3</span>)</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(n, r) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">m=</span>n_max<span class="sc">-</span>n, <span class="at">ind=</span><span class="dv">1</span>, <span class="at">i=</span><span class="fu">cumsum</span>(ind)<span class="sc">-</span><span class="dv">1</span>, <span class="at">ind=</span><span class="cn">NULL</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">PS1=</span><span class="fu">dbbinom</span>(i, <span class="at">size=</span>m, <span class="at">alpha=</span>a_1<span class="sc">+</span>r, <span class="at">beta=</span>b_1<span class="sc">+</span>n<span class="sc">-</span>r), </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Ti=</span><span class="dv">1</span><span class="sc">-</span><span class="fu">pbeta</span>(p_max, a_1<span class="sc">+</span>r<span class="sc">+</span>i, b_1<span class="sc">+</span>n_max<span class="sc">-</span>r<span class="sc">-</span>i), </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ind=</span><span class="fu">ifelse</span>(Ti<span class="sc">&gt;</span>theta_T, <span class="dv">1</span>, <span class="dv">0</span>), n_max)</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(n_max, n, r, m, i, Ti, PS1, ind)</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n<span class="sc">==</span><span class="dv">12</span>, r<span class="sc">==</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 8
+# Groups:   n, r [1]
+   n_max     n     r     m     i     Ti         PS1   ind
+   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;
+ 1    24    12     2    12     0 0.0881 0.139           0
+ 2    24    12     2    12     1 0.190  0.241           0
+ 3    24    12     2    12     2 0.334  0.241           0
+ 4    24    12     2    12     3 0.500  0.180           0
+ 5    24    12     2    12     4 0.661  0.109           1
+ 6    24    12     2    12     5 0.793  0.0549          1
+ 7    24    12     2    12     6 0.887  0.0235          1
+ 8    24    12     2    12     7 0.945  0.00852         1
+ 9    24    12     2    12     8 0.976  0.00257         1
+10    24    12     2    12     9 0.990  0.000627        1
+11    24    12     2    12    10 0.997  0.000117        1
+12    24    12     2    12    11 0.999  0.0000148       1
+13    24    12     2    12    12 1.00   0.000000971     1</code></pre>
+</div>
+</div>
+<p>The predictive probabilities for each <span class="math inline">\(r_1\)</span> are (with <span class="math inline">\(\theta_{S}=0.8\)</span>):</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Early stopping using predictive distribution</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>threshold_safety <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>data_pp <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(n_max, n, r) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">pp=</span><span class="fu">round</span>(<span class="fu">sum</span>(PS1<span class="sc">*</span>ind),<span class="dv">6</span>), </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                                                 <span class="at">stop_pp=</span><span class="fu">ifelse</span>(pp<span class="sc">&gt;</span>threshold_safety, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>data_pp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n<span class="sc">==</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 13 × 5
+# Groups:   n_max, n [1]
+   n_max     n     r      pp stop_pp
+   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1    24    12     0 0.00552       0
+ 2    24    12     1 0.0459        0
+ 3    24    12     2 0.199         0
+ 4    24    12     3 0.502         0
+ 5    24    12     4 0.814         1
+ 6    24    12     5 0.971         1
+ 7    24    12     6 1             1
+ 8    24    12     7 1             1
+ 9    24    12     8 1             1
+10    24    12     9 1             1
+11    24    12    10 1             1
+12    24    12    11 1             1
+13    24    12    12 1             1</code></pre>
+</div>
+</div>
+<p>The same calculation holds for the neutral prior and we get the following stopping boundaries</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>stop_boundaries0 <span class="ot">&lt;-</span> data_pp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(stop_pp<span class="sc">==</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(n_max, n) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">r=</span><span class="fu">min</span>(r), <span class="at">stop=</span><span class="cn">NULL</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>p_max <span class="ot">&lt;-</span> p_max</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>theta_T <span class="ot">&lt;-</span> theta_T</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>threshold_safety <span class="ot">&lt;-</span> threshold_safety</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>prior_type <span class="ot">&lt;-</span> prior_type</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>stop_boundaries <span class="ot">&lt;-</span> stop_boundaries0</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Prior information</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>prior_type <span class="ot">&lt;-</span> <span class="st">"Neutral"</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>a_1 <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>b_1 <span class="ot">&lt;-</span> <span class="fl">5.4</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.001</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>n_initial <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n_initial</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>n_increase <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>n_max <span class="ot">&lt;-</span> <span class="dv">24</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">seq</span>(n_initial, n_max, n_increase)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n_max</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> n_max<span class="sc">-</span>r</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="do">#### Scenario</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>theta_T <span class="ot">&lt;-</span> <span class="fl">0.6</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>threshold_safety <span class="ot">&lt;-</span> <span class="fl">0.8</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">n=</span>n, <span class="at">r=</span>r) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(n) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n<span class="sc">&gt;=</span>r) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">i=</span>n_max<span class="sc">-</span>n<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">expandRows</span>(data, <span class="at">count=</span><span class="dv">3</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(n, r) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">m=</span>n_max<span class="sc">-</span>n, <span class="at">ind=</span><span class="dv">1</span>, <span class="at">i=</span><span class="fu">cumsum</span>(ind)<span class="sc">-</span><span class="dv">1</span>, <span class="at">ind=</span><span class="cn">NULL</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cond_postprob=</span><span class="fu">dbbinom</span>(i, <span class="at">size=</span>m, <span class="at">alpha=</span>a_1<span class="sc">+</span>r, <span class="at">beta=</span>b_1<span class="sc">+</span>n<span class="sc">-</span>r), </span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>                        <span class="at">Ti=</span><span class="dv">1</span><span class="sc">-</span><span class="fu">pbeta</span>(p_max, a_1<span class="sc">+</span>r<span class="sc">+</span>i, b_1<span class="sc">+</span>n_max<span class="sc">-</span>r<span class="sc">-</span>i), </span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ind=</span><span class="fu">ifelse</span>(Ti<span class="sc">&gt;</span>theta_T, <span class="dv">1</span>, <span class="dv">0</span>), n_max)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">select</span>(n_max, n, r, m, i, cond_postprob, Ti, ind)</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="do">## Early stopping using predictive distribution</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>data_pp <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(n_max, n, r) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">pp=</span><span class="fu">round</span>(<span class="fu">sum</span>(cond_postprob<span class="sc">*</span>ind),<span class="dv">6</span>), </span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>                                                 <span class="at">stop_pp=</span><span class="fu">ifelse</span>(pp<span class="sc">&gt;</span>threshold_safety, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>stop_boundaries0 <span class="ot">&lt;-</span> data_pp <span class="sc">%&gt;%</span> <span class="fu">filter</span>(stop_pp<span class="sc">==</span><span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(n_max, n) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">r=</span><span class="fu">min</span>(r), <span class="at">stop=</span><span class="cn">NULL</span>)</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>p_max <span class="ot">&lt;-</span> p_max</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>theta_T <span class="ot">&lt;-</span> theta_T</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>threshold_safety <span class="ot">&lt;-</span> threshold_safety</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>stop_boundaries0<span class="sc">$</span>prior_type <span class="ot">&lt;-</span> prior_type</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>stop_boundaries <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(stop_boundaries, stop_boundaries0)</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>stop_boundaries <span class="sc">%&gt;%</span> <span class="fu">filter</span>(n<span class="sc">==</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 7
+# Groups:   n_max [1]
+  n_max     n     r p_max theta_T threshold_safety prior_type
+  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;     
+1    24    12     4   0.2     0.6              0.8 Skeptical 
+2    24    12     5   0.2     0.6              0.8 Neutral   </code></pre>
+</div>
+</div>
+<section id="design-prior-choice" class="level4" data-number="2.2.5.1">
+<h4 data-number="2.2.5.1" class="anchored" data-anchor-id="design-prior-choice"><span class="header-section-number">2.2.5.1</span> Design prior choice</h4>
+<p>The design prior for the primary endpoint was chosen as based on clinical expert knowledge and available evidence. The TOPAZ-I trial reported 8.9% AE leading to discontinuation, while KENOTE 966 reported a discontinuation proportion of 3%. We decided to be a bit more conservative with an average CD proportion of 10%, while accounting for uncertainty in this assumed proportion: We assumed that the “true” CD proportion comes from a <span class="math inline">\(Beta(1.2,10.8)\)</span> design prior which is centered at a CD proportion of 10% with a 90% uncertainty range from 0.9% to 26.6%. The probability that the discontinuation rate is larger than 20% is 12.2%. The design prior has weight of 12 patients, that is, half of planned patients in the experimental arm.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01-Chapter1_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="analysis-prior-choice" class="level4" data-number="2.2.5.2">
+<h4 data-number="2.2.5.2" class="anchored" data-anchor-id="analysis-prior-choice"><span class="header-section-number">2.2.5.2</span> Analysis prior choice</h4>
+<p>As analysis priors we decided for two scenarios.</p>
+<ul>
+<li>A skeptical Beta(2.4, 9.4) analysis prior for the experimental arm which is centered on a CD proportion of 20% with a probability of excessing 40% of <span class="math inline">\(5.6\)</span>%.</li>
+<li>A neutral Beta(0.6, 5.4) analysis prior for the experimental arm which is centered on a discontinuation proportion of 10%.</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="01-Chapter1_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="simulation-study" class="level3" data-number="2.2.6">
+<h3 data-number="2.2.6" class="anchored" data-anchor-id="simulation-study"><span class="header-section-number">2.2.6</span> Simulation study</h3>
+<p>We set up simulation study to quantify operations characteristics</p>
+<ul>
+<li>Probability of stopping because of non-safety (stopping trial before <span class="math inline">\(N_{max}\)</span> is reached),</li>
+<li>Probability of treatment discontinuation (declaring treatment discontinuation including <span class="math inline">\(N_{max}\)</span>),</li>
+<li>Expected number of patients in experimental arm</li>
+</ul>
+<p>with the following parameters</p>
+<ul>
+<li><p>Beta design priors: Boths arms: a=1.5, b=13.5. True <span class="math inline">\(p_i\)</span> are drawn from the design priors,</p></li>
+<li><p>Beta analysis priors: Boths arms: Skeptical: a=2.4, b=9.6. Neutral: a=0.6, b=5.4,</p></li>
+<li><p>Maximal discontinuation proportion threshold <span class="math inline">\(p_{max}\)</span>: 0.2,</p></li>
+<li><p>Number of randomised patients in the experimental arm at first interim analysis <span class="math inline">\(n_1\)</span>: 12,</p></li>
+<li><p>Number of randomised patients in the control arm at first interim analysis <span class="math inline">\(n_1\)</span>: 6,</p></li>
+<li><p>Excessive discontinuation probability for posterior distribution <span class="math inline">\(\theta_{T}\)</span>: 0.6,</p></li>
+<li><p>Safety threshold for predictive distribution <span class="math inline">\(\theta_{S}\)</span>: 0.8,</p></li>
+<li><p>Number of simulation runs: 10’000,</p></li>
+<li><p>Maximal sample size <span class="math inline">\(N_{max}\)</span>: 12/24 patients per arm,</p></li>
+<li><p>Increase of sample size <span class="math inline">\(n_{increase}\)</span>: 6/12 patients per arm.</p></li>
+</ul>
+</section>
+</section>
+<section id="results" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="results"><span class="header-section-number">2.3</span> Results</h2>
+<p>The results from our simulation study are:</p>
+<table class="table">
+<colgroup>
+<col style="width: 79%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operations characteristics</th>
+<th><span class="math inline">\(N_{max}=36\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Probability of intolerable trial (skeptical prior)</td>
+<td>15.8%</td>
+</tr>
+<tr class="even">
+<td>Probability of intolerable trial (neutral prior)</td>
+<td>8.2%</td>
+</tr>
+<tr class="odd">
+<td>Probability of early stopping because of non-safety</td>
+<td>7.7%</td>
+</tr>
+<tr class="even">
+<td>Expected number of patients in experimental arm</td>
+<td>23.1</td>
+</tr>
+</tbody>
+</table>
+<table class="table">
+<colgroup>
+<col style="width: 79%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Stopping boundaries</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stopping boundary interim analysis (skeptical prior)</td>
+<td>4+</td>
+</tr>
+<tr class="even">
+<td>Intolerable trial at trial end (skeptical prior)</td>
+<td>6+</td>
+</tr>
+<tr class="odd">
+<td>Intolerable trial at trial end (neutral prior)</td>
+<td>7+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="author" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="author">Author</h2>
+<p>André Moser, Senior Statistician<br>
+Department of Clinical Research<br>
+University of Bern<br>
+3012 Bern, Switzerland</p>
 
 
+<div id="refs" class="references csl-bib-body" role="list" style="display: none">
+<div id="ref-Lee2008" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Lee JJ, Liu DD. A predictive probability design for phase II cancer clinical trials. Clinical Trials. 2008;5: 93–106. doi:<a href="https://doi.org/10.1177/1740774508089279">10.1177/1740774508089279</a></div>
+</div>
+<div id="ref-Sambucini2021" class="csl-entry" role="listitem">
+<div class="csl-left-margin">2. </div><div class="csl-right-inline">Sambucini V. Efficacy and toxicity monitoring via bayesian predictive probabilities in phase II clinical trials. Statistical Methods &amp; Applications. 2021;30: 637–663. doi:<a href="https://doi.org/10.1007/s10260-020-00537-3">10.1007/s10260-020-00537-3</a></div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

@@ -1,12 +1,334 @@
-# Chapter 1
+# ABLATIO-BILICA
 
-## Background
+The **ABLATIO-BILICA trial** is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (@Lee2008, @Sambucini2021). The ABLATIO-BILICA trial aims to evaluate the safety of biliary intraductal radiofrequency ablation (bRFA) in patients with unresectable extrahepatic biliary tract cancer (EBTC) undergoing standard of care chemo-immune checkpoint inhibitor-therapy (CICI). It is a multicenter two-arm randomized controlled study.
 
-```{r chunk1}
-#| echo: true
-#| message: false
+We quantify the following trial operations characteristics: Probability of stopping because of non-safety (stopping trial before
+is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.
+
+## Abbreviations
+
+- AE: Adverse event
+- bRFA: Biliary intraductal radiofrequency ablation
+- CD: Chemotherapy discontinuation
+- CICI: Chemo-immune checkpoint inhibitor-therapy
+- EBTC: Extrahepatic biliary tract cancer
+
+## Methods
+
+### Study intervention
+
+**Control arm**: Chemotherapy, durvalumab and endoscopic stenting.
+
+**Experimental arm**: Chemotherapy, durvalumab, endoscopic stenting plus intraductal bRFA.
+
+### Primary endpoint
+
+The primary endpoint is any grade 3 or 4 adverse event (AE) leading to chemotherapy discontinuation up to six months after randomization. AE are assessed by the US National Cancer Institute Common Terminology Criteria for Adverse Events (CTCAE v5).
+
+### Sample size
+
+The sample size was fixed to $N_{max}=36$ patients (24 patients in the experimental arm, 12 patients in the control arm) because of feasibility.
+
+### Study design
+
+The following figure summarises the trial design. Suppose we randomise patients with a 2:1 allocation ratio to the experimental arm and the control arm. Let $p_i$ be the CD proportion coming from a design prior $\pi^d_i \sim Beta(a^d_i,b^d_i)$, $p_i$, $i=0,1$. The design prior represents the uncertainty of $p_i$ at the design stage and might be different from the analysis prior. One interim analysis will be performed after the recruitment of $N^{I}=n_{0}+n_{1}=18$ patients ($n_{0}$ denotes the number of patients in the control arm and $n_{1}$ denotes the number of patients in the experimental arm; The index $I$ stands for 'interim') which corresponds to 50% of the fixed sample size.
+
+```{r fig1}
+#| echo: false
 #| warning: false
-#| 
+#| results: hide
+#| fig-height: 8
+#| fig-width: 8
 
-hist(rnorm(1000))
+library(Gmisc)
+library(grid)
+library(ggplot2)
+library(tidyverse)
+library(splitstackshape)
+library(extraDistr)
+
+grid.newpage()
+
+x_coord1 <- 0.5
+
+text_box1 <- "2:1 randomisation"
+box1 <- boxGrob(text_box1, x=0.5, y=0.9, bjust = "center")
+box1
+
+text_box2 <- "Experimental group with CD proportion \np1 coming from design prior"
+box2 <- boxGrob(text_box2, x=0.3, y=0.6, bjust = "center")
+box2
+
+text_box3 <- "Control group with CD proportion \np0 coming from design prior"
+box3 <- boxGrob(text_box3, x=0.7, y=0.6, bjust = "center")
+box3
+
+text_box4 <- "Interim analysis\n\nStop early:\nIf experimental group has a high predictive probability of excessive discontinuation\notherwise randomise new patients until N_max is reached"
+box4 <- boxGrob(text_box4, x=0.5, y=0.2, bjust = "center")
+box4
+
+connectGrob(box1, box2, "vertical")
+connectGrob(box1, box3, "vertical")
 ```
+
+### Statistical methods
+
+Suppose that at the interim analysis **in the experimental arm** $r_{1}$ discontinuation events are observed. If we assume that $N_{max}=n_{max, 0}+n_{max, 1}$ is the planned sample size of the trial, then a remaining future $m_{1}=n_{max, 1}-n_{1}$ will be recruited in the experimental arm with possible future events $S_1\in\{0,\cdots, m_1\}$. Note that at each interim analysis the posterior distribution is Beta-distributed $p_i|r_i,n_i \sim Beta(a_i+r_i, b_i+n_i-r_i)$ and $S_1|r_1,n_1$ is Beta-binomial distributed $S_1 \sim Betabinomal(m_1, a+r_1, b+n_1-r_1)$.
+
+The trial is stopped early if $PP>\theta_{S}$, for an upper discontinuation proportion threshold $p_{max}$,
+$$
+\begin{aligned}
+PP&=E\left[I\left\{ P\left(p_1>p_{max}|r_{1}, n_{1}, s_{1}\right)>\theta_{T_{Non-safe}}\right\}|r_{1}, n_{1}\right] \\
+&=\sum_{s_1=0}^{m_1} I(P(p_1 > p_{max}|r_{1},n_1,s_1)>\theta_{T_{Non-safe}}) P(S_{1}=s_1|r_{1}, n_1).
+\end{aligned}
+$$
+That is, we stop the trial early if there is a high predictive probability $\Theta_S$ that the discontinuation proportion in the experimental arm exceeds a upper threshold $p_{max}$ given interim data and future events, otherwise the remaining 18 patients are randomised until the fixed sample size is reached.
+
+Stopping boundaries are calculated for each combination of $r_1$ (and thus $m_1$) given the maximal sample size $N_{max}$ and the interim sample size $N^I$. The tibble below shows the example of $r_1=2$ and $n_1=12$ for the skeptical prior. We set $\theta_{T_{Non-safe}}=0.6$.
+
+```{r}
+#| echo: true
+#| warning: false
+
+p_max <- c(0.2)
+
+# Prior information
+prior_type <- "Skeptical"
+a_1 <- 2.4
+b_1 <- 9.6
+
+x <- seq(0,1,0.001)
+
+n_initial <- 12
+r <- 0:n_initial
+n_increase <- 12
+
+n_max <- 24
+n <- seq(n_initial, n_max, n_increase)
+r <- 0:n_max
+m <- n_max-r
+
+#### Scenario
+theta_T <- 0.6
+
+
+
+data <- expand.grid(n=n, r=r) %>% arrange(n) %>% 
+  filter(n>=r) %>% mutate(i=n_max-n+1)
+data <- expandRows(data, count=3)
+data <- data %>% group_by(n, r) %>% 
+  mutate(m=n_max-n, ind=1, i=cumsum(ind)-1, ind=NULL)
+
+data <- data %>% 
+  mutate(PS1=dbbinom(i, size=m, alpha=a_1+r, beta=b_1+n-r), 
+                        Ti=1-pbeta(p_max, a_1+r+i, b_1+n_max-r-i), 
+                        ind=ifelse(Ti>theta_T, 1, 0), n_max)
+
+data <- data %>% select(n_max, n, r, m, i, Ti, PS1, ind)
+data %>% filter(n==12, r==2)
+```
+
+The predictive probabilities for each $r_1$ are (with $\theta_{S}=0.8$):
+
+```{r}
+#| echo: true
+#| warning: false
+
+
+## Early stopping using predictive distribution
+
+threshold_safety <- 0.8
+
+data_pp <- data %>% group_by(n_max, n, r) %>% summarise(pp=round(sum(PS1*ind),6), 
+                                                 stop_pp=ifelse(pp>threshold_safety, 1, 0))
+data_pp %>% filter(n==12)
+```
+
+The same calculation holds for the neutral prior and we get the following stopping boundaries
+
+```{r}
+#| echo: true
+#| warning: false
+
+stop_boundaries0 <- data_pp %>% filter(stop_pp==1) %>%
+  group_by(n_max, n) %>% summarise(r=min(r), stop=NULL)
+stop_boundaries0$p_max <- p_max
+stop_boundaries0$theta_T <- theta_T
+stop_boundaries0$threshold_safety <- threshold_safety
+stop_boundaries0$prior_type <- prior_type
+stop_boundaries <- stop_boundaries0
+
+# Prior information
+prior_type <- "Neutral"
+a_1 <- 0.6
+b_1 <- 5.4
+
+x <- seq(0,1,0.001)
+
+n_initial <- 12
+r <- 0:n_initial
+n_increase <- 12
+
+n_max <- 24
+n <- seq(n_initial, n_max, n_increase)
+r <- 0:n_max
+m <- n_max-r
+
+#### Scenario
+theta_T <- 0.6
+threshold_safety <- 0.8
+
+
+data <- expand.grid(n=n, r=r) %>% arrange(n) %>% filter(n>=r) %>% mutate(i=n_max-n+1)
+data <- expandRows(data, count=3)
+data <- data %>% group_by(n, r) %>% mutate(m=n_max-n, ind=1, i=cumsum(ind)-1, ind=NULL)
+
+data <- data %>% mutate(cond_postprob=dbbinom(i, size=m, alpha=a_1+r, beta=b_1+n-r), 
+                        Ti=1-pbeta(p_max, a_1+r+i, b_1+n_max-r-i), 
+                        ind=ifelse(Ti>theta_T, 1, 0), n_max)
+
+data <- data %>% select(n_max, n, r, m, i, cond_postprob, Ti, ind)
+
+
+
+## Early stopping using predictive distribution
+data_pp <- data %>% group_by(n_max, n, r) %>% summarise(pp=round(sum(cond_postprob*ind),6), 
+                                                 stop_pp=ifelse(pp>threshold_safety, 1, 0))
+
+
+
+stop_boundaries0 <- data_pp %>% filter(stop_pp==1) %>%
+  group_by(n_max, n) %>% summarise(r=min(r), stop=NULL)
+stop_boundaries0$p_max <- p_max
+stop_boundaries0$theta_T <- theta_T
+stop_boundaries0$threshold_safety <- threshold_safety
+stop_boundaries0$prior_type <- prior_type
+stop_boundaries <- bind_rows(stop_boundaries, stop_boundaries0)
+
+
+stop_boundaries %>% filter(n==12)
+```
+
+
+#### Design prior choice
+
+The design prior for the primary endpoint was chosen as based on clinical expert knowledge and available evidence. The TOPAZ-I trial reported 8.9% AE leading to discontinuation, while KENOTE 966 reported a discontinuation proportion of 3%. We decided to be a bit more conservative with an average CD proportion of 10%, while accounting for uncertainty in this assumed proportion: We assumed that the "true" CD proportion comes from a $Beta(1.2,10.8)$ design prior which is centered at a CD proportion of 10% with a 90% uncertainty range from 0.9% to 26.6%. The probability that the discontinuation rate is larger than 20% is 12.2%. The design prior has weight of 12 patients, that is, half of planned patients in the experimental arm.
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Prior information control
+a_0 <- 1.2
+b_0 <- 10.8
+
+x <- seq(0.001,0.999,0.001)
+
+# qbeta(0.05, a_0, b_0)
+# qbeta(0.95, a_0, b_0)
+# pbeta(0.03, a_0, b_0)
+# 1-pbeta(0.15, a_0, b_0)
+# 1-pbeta(0.20, a_0, b_0)
+
+data_prior <- data.frame(x, y=dbeta(x, a_0, b_0), type=1)
+
+# Prior information experimental
+# a_0 <- 5/4
+# b_0 <- 45/4
+
+
+data_prior$type <- factor(data_prior$type, levels=1, labels=c("a=1.2, b=10.8 (both arms)"))
+fig <- ggplot(data_prior, aes(x=x, y=y, linetype=type, group=type))+
+  geom_line()+theme_bw()+scale_x_continuous(breaks=seq(0,1,0.1))+
+  theme(panel.grid = element_blank(), legend.position = "bottom")+
+  scale_linetype("Prior parameters")+
+  geom_vline(xintercept=0.1, colour="red", linetype=2)+
+  ylab("Density")+xlab("")+ggtitle("Beta design prior")+
+  labs(caption=c("Dashed red vertical lines indicates mean value of design prior."))
+fig
+```
+
+#### Analysis prior choice
+
+As analysis priors we decided for two scenarios.
+
+- A skeptical Beta(2.4, 9.4) analysis prior for the experimental arm which is centered on a CD proportion of 20% with a probability of excessing 40% of $5.6$%.
+- A neutral Beta(0.6, 5.4) analysis prior for the experimental arm which is centered on a discontinuation proportion of 10%. 
+
+```{r}
+#| echo: false
+#| warning: false
+
+# Skeptical prior
+a_0 <- 2.4
+b_0 <- 9.6
+
+x <- seq(0.001,0.999,0.001)
+
+data_prior <- data.frame(x, y=dbeta(x, a_0, b_0), type=1)
+
+# Neutral prior
+a_0 <- 0.6
+b_0 <- 5.4
+
+data_prior <- bind_rows(data_prior, data.frame(x, y=dbeta(x, a_0, b_0), type=2))
+
+
+data_prior$type <- factor(data_prior$type, levels=1:2, 
+                          labels=c("a=2.4, b=9.6 (Skeptical prior)", "a=0.6, b=5.4 (Neutral prior)"))
+fig <- ggplot(data_prior %>% filter(y<5), aes(x=x, y=y, linetype=type, group=type))+
+  geom_line()+theme_bw()+scale_x_continuous(breaks=seq(0,1,0.1))+
+  theme(panel.grid = element_blank(), legend.position = "bottom", legend.direction = "vertical")+
+  scale_linetype("Prior parameters")+geom_vline(xintercept=0.2, colour="red", linetype=1)+
+  geom_vline(xintercept=0.1, colour="red", linetype=2)+
+  ylab("Density")+xlab("")+ggtitle("Beta analysis prior")+
+  labs(caption=c("Red vertical lines indicate mean values of priors."))
+fig
+```
+
+
+### Simulation study
+
+We set up simulation study to quantify operations characteristics
+
+- Probability of stopping because of non-safety (stopping trial before $N_{max}$ is reached),
+- Probability of treatment discontinuation (declaring treatment discontinuation including $N_{max}$),
+- Expected number of patients in experimental arm
+
+with the following parameters
+
+- Beta design priors: Boths arms: a=1.5, b=13.5. True $p_i$ are drawn from the design priors,
+- Beta analysis priors: Boths arms: Skeptical: a=2.4, b=9.6. Neutral: a=0.6, b=5.4,
+- Maximal discontinuation proportion threshold $p_{max}$: 0.2,
+- Number of randomised patients in the experimental arm at first interim analysis $n_1$: 12,
+- Number of randomised patients in the control arm at first interim analysis $n_1$: 6,
+- Excessive discontinuation probability for posterior distribution $\theta_{T}$: 0.6,
+- Safety threshold for predictive distribution $\theta_{S}$: 0.8,
+- Number of simulation runs: 10'000,
+
+- Maximal sample size $N_{max}$: 12/24 patients per arm,
+- Increase of sample size $n_{increase}$: 6/12 patients per arm.
+
+## Results
+
+The results from our simulation study are:
+
+| Operations characteristics                                  | $N_{max}=36$   |
+|-------------------------------------------------------------|----------------|
+| Probability of intolerable trial (skeptical prior)          | 15.8%            |
+| Probability of intolerable trial (neutral prior)            | 8.2%            |
+| Probability of early stopping because of non-safety         | 7.7%           |
+| Expected number of patients in experimental arm             | 23.1           |
+
+| Stopping boundaries                                         |    |
+|-------------------------------------------------------------|----------------|
+| Stopping boundary interim analysis (skeptical prior)        | 4+           |
+| Intolerable trial at trial end (skeptical prior)      | 6+           |
+| Intolerable trial at trial end (neutral prior)        | 7+           |
+
+## Author {-}
+
+André Moser, Senior Statistician\
+Department of Clinical Research\
+University of Bern\
+3012 Bern, Switzerland
