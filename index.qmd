@@ -1,6 +1,6 @@
 # Introduction
 
-This is the CTU Bern Bayesian Toolbox. References are @Spiegelhalter2003, @Grieve2022, @Gelman2013.
+This is the CTU Bern Bayesian Toolbox.
 
 ## General notation and abbreviations
 
