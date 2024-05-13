@@ -1,9 +1,8 @@
 # ABLATIO-BILICA
 
-The **ABLATIO-BILICA trial** is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (@Lee2008, @Sambucini2021). The ABLATIO-BILICA trial aims to evaluate the safety of biliary intraductal radiofrequency ablation (bRFA) in patients with unresectable extrahepatic biliary tract cancer (EBTC) undergoing standard of care chemo-immune checkpoint inhibitor-therapy (CICI). It is a multicenter two-arm randomized controlled study.
+The **ABLATIO-BILICA trial** is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (@Lee2008, @Sambucini2021). The ABLATIO-BILICA trial aims to evaluate the safety of biliary intraductal radiofrequency ablation (bRFA) in patients with unresectable extrahepatic biliary tract cancer (EBTC) undergoing standard of care chemo-immune checkpoint inhibitor-therapy (CICI). It is a multicenter two-arm randomized controlled study. The primary endpoint is chemotherapy discontinuation (CD) because of adverse events.
 
-We quantify the following trial operations characteristics: Probability of stopping because of non-safety (stopping trial before
-is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.
+The trial is designed with early stopping decisions rules based on predictive probabilities that the intervention is non-safe, that is, a high probability of an excess CD proportion given interim data. We quantify the trial operations characteristics probability of stopping because of non-safety (stopping trial before maximal sample size is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.
 
 ## Abbreviations
 
@@ -70,6 +69,10 @@ box4
 connectGrob(box1, box2, "vertical")
 connectGrob(box1, box3, "vertical")
 ```
+
+### Stopping criterium
+
+The excessive threshold for stopping the trial was set to $p_{max}=0.2$. This number was based on the design prior choice (see subsection 'Design prior choice'). In brief, based on a discussion with clinical experts and available evidence the assumed mean average CD proportion was set to $0.1$. A doubling of this number led to $p_{max}=0.2$. 
 
 ### Statistical methods
 
