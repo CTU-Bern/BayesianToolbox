@@ -1,5 +1,15 @@
 # ABLATIO-BILICA
 
+```{r}
+#| echo: false
+#| warning: false
+
+library(ggplot2)
+library(tidyverse)
+library(splitstackshape)
+library(extraDistr)
+```
+
 The **ABLATIO-BILICA trial** is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (@Lee2008, @Sambucini2021). The ABLATIO-BILICA trial aims to evaluate the safety of biliary intraductal radiofrequency ablation (bRFA) in patients with unresectable extrahepatic biliary tract cancer (EBTC) undergoing standard of care chemo-immune checkpoint inhibitor-therapy (CICI). It is a multicenter two-arm randomized controlled study. The primary endpoint is chemotherapy discontinuation (CD) because of adverse events.
 
 The trial is designed with early stopping decisions rules based on predictive probabilities that the intervention is non-safe, that is, a high probability of an excess CD proportion given interim data. We quantify the trial operations characteristics probability of stopping because of non-safety (stopping trial before maximal sample size is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.
@@ -32,42 +42,16 @@ The sample size was fixed to $N_{max}=36$ patients (24 patients in the experimen
 
 The following figure summarises the trial design. Suppose we randomise patients with a 2:1 allocation ratio to the experimental arm and the control arm. Let $p_i$ be the CD proportion coming from a design prior $\pi^d_i \sim Beta(a^d_i,b^d_i)$, $p_i$, $i=0,1$. The design prior represents the uncertainty of $p_i$ at the design stage and might be different from the analysis prior. One interim analysis will be performed after the recruitment of $N^{I}=n_{0}+n_{1}=18$ patients ($n_{0}$ denotes the number of patients in the control arm and $n_{1}$ denotes the number of patients in the experimental arm; The index $I$ stands for 'interim') which corresponds to 50% of the fixed sample size.
 
-```{r fig1}
-#| echo: false
-#| warning: false
-#| results: hide
-#| fig-height: 8
-#| fig-width: 8
-
-library(Gmisc)
-library(grid)
-library(ggplot2)
-library(tidyverse)
-library(splitstackshape)
-library(extraDistr)
-
-grid.newpage()
-
-x_coord1 <- 0.5
-
-text_box1 <- "2:1 randomisation"
-box1 <- boxGrob(text_box1, x=0.5, y=0.9, bjust = "center")
-box1
-
-text_box2 <- "Experimental group with CD proportion \np1 coming from design prior"
-box2 <- boxGrob(text_box2, x=0.3, y=0.6, bjust = "center")
-box2
-
-text_box3 <- "Control group with CD proportion \np0 coming from design prior"
-box3 <- boxGrob(text_box3, x=0.7, y=0.6, bjust = "center")
-box3
-
-text_box4 <- "Interim analysis\n\nStop early:\nIf experimental group has a high predictive probability of excessive discontinuation\notherwise randomise new patients until N_max is reached"
-box4 <- boxGrob(text_box4, x=0.5, y=0.2, bjust = "center")
-box4
-
-connectGrob(box1, box2, "vertical")
-connectGrob(box1, box3, "vertical")
+```{mermaid}
+flowchart TD
+  A[2:1 randomisation] --> B[Experimental group with CD proportion \np1 coming from design prior]
+  A --> C[Control group with CD proportion \np0 coming from design prior]
+  B ~~~ D[Interim analysis\n\nStop early:\nIf experimental group has a high predictive probability of excessive discontinuation\notherwise randomise new patients until N_max is reached]
+  C ~~~ D
+  style A fill:white,color:black
+  style B fill:white,color:black
+  style C fill:white,color:black
+  style D fill:white,color:black,stroke-dasharray: 5 5
 ```
 
 ### Stopping criterium
