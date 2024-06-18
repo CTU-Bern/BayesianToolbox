@@ -1,4 +1,6 @@
-# Bayesian sample size calculation for a continuous outcome
+# Two-arm study with a continuous primary outcome
+
+This vignette was motivated by a consulting of CTU Bern (C2956). It describes the sample size approach for a randomized Bayesian phase II trial with a continuous outcome that is corrected for the baseline value.
 
 ## Study description
 
@@ -8,7 +10,7 @@ The study examines the impact of a treatment on upper limb motor activity in eve
 ### Primary outcome
 The primary endpoint is bimanual hand function measured with the Assisting Hand Assessment (AHA) after treatment.
 
-### Design
+### Study design
 In this exploratory randomized Bayesian phase-II trial, we evaluate the probability that the investigational treatment is superior to the standard of care using Bayesian statistics. If this probability exceeds 90%, we deem the treatment as promising. 
 
 
@@ -29,9 +31,12 @@ We calculate the Bayesian probability of success (equivalent to the frequentist 
 
 ## Calculation using R
 
+### R-code
+
 ```{r}
 #| echo: true
 #| warning: false
+#| eval: false
 
 #install.packages("C:/download/INLA_24.02.09.zip", repos = NULL, type = "bin") # manual download of latest version
 library(INLA)
@@ -41,7 +46,7 @@ rm(list = ls())
 set.seed(123)
 
 # Set parameters
-n_simulations <- 50
+n_simulations <- 10
 n_patients <- 17 # per arm
 effect_size <- 0.6
 correlation <- 0.5
@@ -55,10 +60,10 @@ mean_p <- 1.0
 prior_custom <- list(mean=list(treatment=mean_p), prec=list(treatment=prec_p))
 threshold_prob <- 0.9
 
-power_noprior <- numeric(n_simulations)
-power_prior <- numeric(n_simulations)
+success_noprior <- numeric(n_simulations)
+success_prior <- numeric(n_simulations)
 
-# Simulate and fit the model multiple times to estimate power
+# Simulate and fit the model multiple times
 for (i in 1:n_simulations) {
   print(i)
   # Generate simulated data
@@ -78,7 +83,6 @@ for (i in 1:n_simulations) {
   
   # Model formula
   formula <- outcome ~ treatment + baseline  # Model formula
-  formula_out <- outcome ~ treatment
   
   # Bayesian INLA model without prior (non-informative)
   model_noprior <- inla(formula, data = data, family = "gaussian")
@@ -92,29 +96,30 @@ for (i in 1:n_simulations) {
   
   # Posterior of treatment coefficient
   posterior_prob_noprior <- 1 - inla.pmarginal(0, model_noprior$marginals.fixed$treatment)
-  power_noprior[i] <- posterior_prob_noprior > threshold_prob
+  success_noprior[i] <- posterior_prob_noprior > threshold_prob
   posterior_prob_prior <- 1 - inla.pmarginal(0, model_prior$marginals.fixed$treatment)
-  power_prior[i] <- posterior_prob_prior > threshold_prob
+  success_prior[i] <- posterior_prob_prior > threshold_prob
   }
   
-# Calculate average power
-average_power_noprior <- mean(power_noprior)
-average_power_prior <- mean(power_prior)
+# Calculate probability of success
+prob_success_noprior <- mean(success_noprior)
+prob_success_power_prior <- mean(success_prior)
 ```
 
 
-## Result of simulation
+### Result of simulation
 
-The probability of success based on the non-informative and informative prior is `r average_power_noprior` and `r average_power_prior`, respectively.
+The probability of success based on the non-informative and informative prior is 0.77 and 0.84, respectively.
 
-## Analysis apporach
+
+## Analysis approach
 
 The primary outcome will be assessed in both groups before and after the training.
 The difference in AHA between groups will be evaluated using a Bayesian linear regression model, adjusting for baseline values and stratification factors employed during randomization. An informative Gaussian prior, as described in the sample size section above, will be incorporated into the model. From the posterior distribution, we will calculate the mean difference along with a 95% credible interval as well as the probability that investigational treatment is superior to standard of care. In a sensitivity analysis, a non-informative prior will be employed.
 
 
 
-## Author {-}
+### Author {-}
 
 Andreas Limacher, PhD\
 Department of Clinical Research\

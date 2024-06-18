@@ -138,5 +138,33 @@
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>ABLATIO-BILICA</span>"
     ]
+  },
+  {
+    "objectID": "02-SampleSize-ContinuousOutcome.html#study-description",
+    "href": "02-SampleSize-ContinuousOutcome.html#study-description",
+    "title": "3  Two-arm study with a continuous primary outcome",
+    "section": "3.1 Study description",
+    "text": "3.1 Study description\n\n3.1.1 Primary objective\nThe study examines the impact of a treatment on upper limb motor activity in everyday life.\n\n\n3.1.2 Primary outcome\nThe primary endpoint is bimanual hand function measured with the Assisting Hand Assessment (AHA) after treatment.\n\n\n3.1.3 Study design\nIn this exploratory randomized Bayesian phase-II trial, we evaluate the probability that the investigational treatment is superior to the standard of care using Bayesian statistics. If this probability exceeds 90%, we deem the treatment as promising."
+  },
+  {
+    "objectID": "02-SampleSize-ContinuousOutcome.html#methods-and-assumptions",
+    "href": "02-SampleSize-ContinuousOutcome.html#methods-and-assumptions",
+    "title": "3  Two-arm study with a continuous primary outcome",
+    "section": "3.2 Methods and assumptions",
+    "text": "3.2 Methods and assumptions\nWe calculate the Bayesian probability of success (equivalent to the frequentist power) for the primary outcome using Monte-Carlo simulations. Success is defined as a difference in AHA greater than 0 in favor of the treatment. We simulate outcome and its respective baseline data from a multivariate normal distribution with a correlation of 0.5 and evaluate the treatment difference using Bayesian linear regression. We calculate the probability of success twice, first, using a non-informative prior (i.e. not integrating any prior information) and second, using an informative prior with an effect size of 1.0 and a precision of 1.0, which was based on a previous publication. This prior corresponds to approximately two patients in terms of weight.\n\nAllocation ratio: 1:1\nEffect measure: Difference in AHA (corrected for the baseline value)\nAnalysis approach: Bayesian linear regression using INLA\nExpected effect size: 0.6\nExpected correlation between baseline and outcome value: 0.5\nProbability threshold to claim success: 0.9\nNon-informative prior: Mean 0, precision 0.001\nInformative prior: Mean 1.0, precision 1.0\nTotal sample size: 34\nNumber of simulations: 10,000"
+  },
+  {
+    "objectID": "02-SampleSize-ContinuousOutcome.html#calculation-using-r",
+    "href": "02-SampleSize-ContinuousOutcome.html#calculation-using-r",
+    "title": "3  Two-arm study with a continuous primary outcome",
+    "section": "3.3 Calculation using R",
+    "text": "3.3 Calculation using R\n\n3.3.1 R-code\n\n\nShow R code\n#install.packages(\"C:/download/INLA_24.02.09.zip\", repos = NULL, type = \"bin\") # manual download of latest version\nlibrary(INLA)\nlibrary(MASS)\n\nrm(list = ls())\nset.seed(123)\n\n# Set parameters\nn_simulations <- 10\nn_patients <- 17 # per arm\neffect_size <- 0.6\ncorrelation <- 0.5\nsd <- 1.0\ncor_matrix <- matrix(c(sd, correlation, correlation, sd), nrow = 2)\n\n# Define prior and threshold probability\nsd_p <- 1\nprec_p <- 1/sd_p^2\nmean_p <- 1.0\nprior_custom <- list(mean=list(treatment=mean_p), prec=list(treatment=prec_p))\nthreshold_prob <- 0.9\n\nsuccess_noprior <- numeric(n_simulations)\nsuccess_prior <- numeric(n_simulations)\n\n# Simulate and fit the model multiple times\nfor (i in 1:n_simulations) {\n  print(i)\n  # Generate simulated data\n  control_data <- mvrnorm(n = n_patients, mu = c(0, 0), Sigma = cor_matrix)\n  control_data <- data.frame(\n    baseline = control_data[, 1],\n    outcome = control_data[, 2],\n    treatment = 0\n  )\n  treatment_data <- mvrnorm(n = n_patients, mu = c(0, effect_size), Sigma = cor_matrix)\n  treatment_data <- data.frame(\n    baseline = treatment_data[, 1],\n    outcome = treatment_data[, 2],\n    treatment = 1\n  )\n  data <- rbind(control_data, treatment_data)\n  \n  # Model formula\n  formula <- outcome ~ treatment + baseline  # Model formula\n  \n  # Bayesian INLA model without prior (non-informative)\n  model_noprior <- inla(formula, data = data, family = \"gaussian\")\n  model_noprior$summary.fixed\n  1 - inla.pmarginal(0, model_noprior$marginals.fixed$treatment)\n  \n  # Model with informative prior\n  model_prior <- inla(formula, data = data, family = \"gaussian\", control.fixed=prior_custom)\n  model_prior$summary.fixed\n  1 - inla.pmarginal(0, model_prior$marginals.fixed$treatment)\n  \n  # Posterior of treatment coefficient\n  posterior_prob_noprior <- 1 - inla.pmarginal(0, model_noprior$marginals.fixed$treatment)\n  success_noprior[i] <- posterior_prob_noprior > threshold_prob\n  posterior_prob_prior <- 1 - inla.pmarginal(0, model_prior$marginals.fixed$treatment)\n  success_prior[i] <- posterior_prob_prior > threshold_prob\n  }\n  \n# Calculate probability of success\nprob_success_noprior <- mean(success_noprior)\nprob_success_power_prior <- mean(success_prior)\n\n\n\n\n3.3.2 Result of simulation\nThe probability of success based on the non-informative and informative prior is 0.77 and 0.84, respectively."
+  },
+  {
+    "objectID": "02-SampleSize-ContinuousOutcome.html#analysis-approach",
+    "href": "02-SampleSize-ContinuousOutcome.html#analysis-approach",
+    "title": "3  Two-arm study with a continuous primary outcome",
+    "section": "3.4 Analysis approach",
+    "text": "3.4 Analysis approach\nThe primary outcome will be assessed in both groups before and after the training. The difference in AHA between groups will be evaluated using a Bayesian linear regression model, adjusting for baseline values and stratification factors employed during randomization. An informative Gaussian prior, as described in the sample size section above, will be incorporated into the model. From the posterior distribution, we will calculate the mean difference along with a 95% credible interval as well as the probability that investigational treatment is superior to standard of care. In a sensitivity analysis, a non-informative prior will be employed.\n\nAuthor\nAndreas Limacher, PhD\nDepartment of Clinical Research\nUniversity of Bern\n3012 Bern, Switzerland"
   }
 ]
