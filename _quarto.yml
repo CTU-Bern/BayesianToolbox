@@ -10,9 +10,11 @@ book:
   title: "Bayesian Toolbox"
   search: false
   chapters:
-    - index.qmd
-    - 01-Chapter1.qmd
-    - 02-SampleSize-ContinuousOutcome.qmd
+    - part: index.qmd
+    - part: 01-SampleSize.qmd
+      chapters:	
+        - 01-SampleSize-BinaryOutcome.qmd
+        - 01-SampleSize-ContinuousOutcome.qmd
     - references.qmd
 
 format:

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Bayesian Toolbox – 3&nbsp; Two-arm study with a continuous primary outcome</title>
+<title>Bayesian Toolbox – 2&nbsp; Two-arm study with a continuous primary outcome</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -100,7 +100,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./02-SampleSize-ContinuousOutcome.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-SampleSize.html">Sample size</a></li><li class="breadcrumb-item"><a href="./01-SampleSize-ContinuousOutcome.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -109,8 +109,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></h1>
+    <div class="quarto-title column-body"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./01-SampleSize.html">Sample size</a></li><li class="breadcrumb-item"><a href="./01-SampleSize-ContinuousOutcome.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></a></li></ol></nav>
+      <h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></h1>
                       </div>
   </div>
     
@@ -133,24 +133,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <span class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Introduction</span></span>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="./01-SampleSize.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sample size</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./01-SampleSize-BinaryOutcome.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Two-arm study with a binary primary outcome</span></span></a>
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Two-arm study with a binary primary outcome</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./02-SampleSize-ContinuousOutcome.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></span></a>
+  <a href="./01-SampleSize-ContinuousOutcome.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Two-arm study with a continuous primary outcome</span></span></a>
   </div>
 </li>
+      </ul>
+  </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
@@ -163,19 +172,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#study-description" id="toc-study-description" class="nav-link active" data-scroll-target="#study-description"><span class="header-section-number">3.1</span> Study description</a>
+  <li><a href="#study-description" id="toc-study-description" class="nav-link active" data-scroll-target="#study-description"><span class="header-section-number">2.1</span> Study description</a>
   <ul>
-  <li><a href="#primary-objective" id="toc-primary-objective" class="nav-link" data-scroll-target="#primary-objective"><span class="header-section-number">3.1.1</span> Primary objective</a></li>
-  <li><a href="#primary-outcome" id="toc-primary-outcome" class="nav-link" data-scroll-target="#primary-outcome"><span class="header-section-number">3.1.2</span> Primary outcome</a></li>
-  <li><a href="#study-design" id="toc-study-design" class="nav-link" data-scroll-target="#study-design"><span class="header-section-number">3.1.3</span> Study design</a></li>
+  <li><a href="#primary-objective" id="toc-primary-objective" class="nav-link" data-scroll-target="#primary-objective"><span class="header-section-number">2.1.1</span> Primary objective</a></li>
+  <li><a href="#primary-outcome" id="toc-primary-outcome" class="nav-link" data-scroll-target="#primary-outcome"><span class="header-section-number">2.1.2</span> Primary outcome</a></li>
+  <li><a href="#study-design" id="toc-study-design" class="nav-link" data-scroll-target="#study-design"><span class="header-section-number">2.1.3</span> Study design</a></li>
   </ul></li>
-  <li><a href="#methods-and-assumptions" id="toc-methods-and-assumptions" class="nav-link" data-scroll-target="#methods-and-assumptions"><span class="header-section-number">3.2</span> Methods and assumptions</a></li>
-  <li><a href="#calculation-using-r" id="toc-calculation-using-r" class="nav-link" data-scroll-target="#calculation-using-r"><span class="header-section-number">3.3</span> Calculation using R</a>
+  <li><a href="#methods-and-assumptions" id="toc-methods-and-assumptions" class="nav-link" data-scroll-target="#methods-and-assumptions"><span class="header-section-number">2.2</span> Methods and assumptions</a></li>
+  <li><a href="#calculation-using-r" id="toc-calculation-using-r" class="nav-link" data-scroll-target="#calculation-using-r"><span class="header-section-number">2.3</span> Calculation using R</a>
   <ul>
-  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="header-section-number">3.3.1</span> R-code</a></li>
-  <li><a href="#result-of-simulation" id="toc-result-of-simulation" class="nav-link" data-scroll-target="#result-of-simulation"><span class="header-section-number">3.3.2</span> Result of simulation</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="header-section-number">2.3.1</span> R-code</a></li>
+  <li><a href="#result-of-simulation" id="toc-result-of-simulation" class="nav-link" data-scroll-target="#result-of-simulation"><span class="header-section-number">2.3.2</span> Result of simulation</a></li>
   </ul></li>
-  <li><a href="#analysis-approach" id="toc-analysis-approach" class="nav-link" data-scroll-target="#analysis-approach"><span class="header-section-number">3.4</span> Analysis approach</a>
+  <li><a href="#analysis-approach" id="toc-analysis-approach" class="nav-link" data-scroll-target="#analysis-approach"><span class="header-section-number">2.4</span> Analysis approach</a>
   <ul>
   <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   </ul></li>
@@ -194,23 +203,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>This vignette was motivated by a consulting of CTU Bern (C2956). It describes the sample size approach for a randomized Bayesian phase II trial with a continuous outcome that is corrected for the baseline value.</p>
-<section id="study-description" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="study-description"><span class="header-section-number">3.1</span> Study description</h2>
-<section id="primary-objective" class="level3" data-number="3.1.1">
-<h3 data-number="3.1.1" class="anchored" data-anchor-id="primary-objective"><span class="header-section-number">3.1.1</span> Primary objective</h3>
+<section id="study-description" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="study-description"><span class="header-section-number">2.1</span> Study description</h2>
+<section id="primary-objective" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="primary-objective"><span class="header-section-number">2.1.1</span> Primary objective</h3>
 <p>The study examines the impact of a treatment on upper limb motor activity in everyday life.</p>
 </section>
-<section id="primary-outcome" class="level3" data-number="3.1.2">
-<h3 data-number="3.1.2" class="anchored" data-anchor-id="primary-outcome"><span class="header-section-number">3.1.2</span> Primary outcome</h3>
+<section id="primary-outcome" class="level3" data-number="2.1.2">
+<h3 data-number="2.1.2" class="anchored" data-anchor-id="primary-outcome"><span class="header-section-number">2.1.2</span> Primary outcome</h3>
 <p>The primary endpoint is bimanual hand function measured with the Assisting Hand Assessment (AHA) after treatment.</p>
 </section>
-<section id="study-design" class="level3" data-number="3.1.3">
-<h3 data-number="3.1.3" class="anchored" data-anchor-id="study-design"><span class="header-section-number">3.1.3</span> Study design</h3>
+<section id="study-design" class="level3" data-number="2.1.3">
+<h3 data-number="2.1.3" class="anchored" data-anchor-id="study-design"><span class="header-section-number">2.1.3</span> Study design</h3>
 <p>In this exploratory randomized Bayesian phase-II trial, we evaluate the probability that the investigational treatment is superior to the standard of care using Bayesian statistics. If this probability exceeds 90%, we deem the treatment as promising.</p>
 </section>
 </section>
-<section id="methods-and-assumptions" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="methods-and-assumptions"><span class="header-section-number">3.2</span> Methods and assumptions</h2>
+<section id="methods-and-assumptions" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="methods-and-assumptions"><span class="header-section-number">2.2</span> Methods and assumptions</h2>
 <p>We calculate the Bayesian probability of success (equivalent to the frequentist power) for the primary outcome using Monte-Carlo simulations. Success is defined as a difference in AHA greater than 0 in favor of the treatment. We simulate outcome and its respective baseline data from a multivariate normal distribution with a correlation of 0.5 and evaluate the treatment difference using Bayesian linear regression. We calculate the probability of success twice, first, using a non-informative prior (i.e.&nbsp;not integrating any prior information) and second, using an informative prior with an effect size of 1.0 and a precision of 1.0, which was based on a previous publication. This prior corresponds to approximately two patients in terms of weight.</p>
 <ul>
 <li>Allocation ratio: 1:1</li>
@@ -225,10 +234,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Number of simulations: 10,000</li>
 </ul>
 </section>
-<section id="calculation-using-r" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="calculation-using-r"><span class="header-section-number">3.3</span> Calculation using R</h2>
-<section id="r-code" class="level3" data-number="3.3.1">
-<h3 data-number="3.3.1" class="anchored" data-anchor-id="r-code"><span class="header-section-number">3.3.1</span> R-code</h3>
+<section id="calculation-using-r" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="calculation-using-r"><span class="header-section-number">2.3</span> Calculation using R</h2>
+<section id="r-code" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="r-code"><span class="header-section-number">2.3.1</span> R-code</h3>
 <div class="cell">
 <details class="code-fold">
 <summary>Show R code</summary>
@@ -301,13 +310,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="result-of-simulation" class="level3" data-number="3.3.2">
-<h3 data-number="3.3.2" class="anchored" data-anchor-id="result-of-simulation"><span class="header-section-number">3.3.2</span> Result of simulation</h3>
+<section id="result-of-simulation" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="result-of-simulation"><span class="header-section-number">2.3.2</span> Result of simulation</h3>
 <p>The probability of success based on the non-informative and informative prior is 0.77 and 0.84, respectively.</p>
 </section>
 </section>
-<section id="analysis-approach" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="analysis-approach"><span class="header-section-number">3.4</span> Analysis approach</h2>
+<section id="analysis-approach" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="analysis-approach"><span class="header-section-number">2.4</span> Analysis approach</h2>
 <p>The primary outcome will be assessed in both groups before and after the training. The difference in AHA between groups will be evaluated using a Bayesian linear regression model, adjusting for baseline values and stratification factors employed during randomization. An informative Gaussian prior, as described in the sample size section above, will be incorporated into the model. From the posterior distribution, we will calculate the mean difference along with a 95% credible interval as well as the probability that investigational treatment is superior to standard of care. In a sensitivity analysis, a non-informative prior will be employed.</p>
 <section id="author" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="author">Author</h3>
@@ -744,7 +753,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./01-SampleSize-BinaryOutcome.html" class="pagination-link" aria-label="Two-arm study with a binary primary outcome">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Two-arm study with a binary primary outcome</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Two-arm study with a binary primary outcome</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

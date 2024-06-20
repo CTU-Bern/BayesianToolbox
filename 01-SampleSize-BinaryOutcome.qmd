@@ -1,4 +1,4 @@
-# ABLATIO-BILICA
+# Two-arm study with a binary primary outcome
 
 ```{r}
 #| echo: false
@@ -10,29 +10,11 @@ library(splitstackshape)
 library(extraDistr)
 ```
 
-The **ABLATIO-BILICA trial** is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (@Lee2008, @Sambucini2021). The ABLATIO-BILICA trial aims to evaluate the safety of biliary intraductal radiofrequency ablation (bRFA) in patients with unresectable extrahepatic biliary tract cancer (EBTC) undergoing standard of care chemo-immune checkpoint inhibitor-therapy (CICI). It is a multicenter two-arm randomized controlled study. The primary endpoint is chemotherapy discontinuation (CD) because of adverse events.
+This vignette was motivated by a study of CTU Bern (1938). It is an example of a Bayesian phase-II trial design with interim threshold stopping using predictive probabilities (@Lee2008, @Sambucini2021). The primary endpoint is a binary endpoint, say, treatment discontinuation (TD).
 
-The trial is designed with early stopping decisions rules based on predictive probabilities that the intervention is non-safe, that is, a high probability of an excess CD proportion given interim data. We quantify the trial operations characteristics probability of stopping because of non-safety (stopping trial before maximal sample size is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.
-
-## Abbreviations
-
-- AE: Adverse event
-- bRFA: Biliary intraductal radiofrequency ablation
-- CD: Chemotherapy discontinuation
-- CICI: Chemo-immune checkpoint inhibitor-therapy
-- EBTC: Extrahepatic biliary tract cancer
+The trial is designed with early stopping decisions rules based on predictive probabilities that the intervention is non-safe, that is, a high probability of an excess TD proportion given interim data. We quantify the trial operations characteristics probability of stopping because of non-safety (stopping trial before maximal sample size is reached), probability of treatment discontinuation and the expected number of patients in experimental arm using a simulation approach.
 
 ## Methods
-
-### Study intervention
-
-**Control arm**: Chemotherapy, durvalumab and endoscopic stenting.
-
-**Experimental arm**: Chemotherapy, durvalumab, endoscopic stenting plus intraductal bRFA.
-
-### Primary endpoint
-
-The primary endpoint is any grade 3 or 4 adverse event (AE) leading to chemotherapy discontinuation up to six months after randomization. AE are assessed by the US National Cancer Institute Common Terminology Criteria for Adverse Events (CTCAE v5).
 
 ### Sample size
 
@@ -40,12 +22,12 @@ The sample size was fixed to $N_{max}=36$ patients (24 patients in the experimen
 
 ### Study design
 
-The following figure summarises the trial design. Suppose we randomise patients with a 2:1 allocation ratio to the experimental arm and the control arm. Let $p_i$ be the CD proportion coming from a design prior $\pi^d_i \sim Beta(a^d_i,b^d_i)$, $p_i$, $i=0,1$. The design prior represents the uncertainty of $p_i$ at the design stage and might be different from the analysis prior. One interim analysis will be performed after the recruitment of $N^{I}=n_{0}+n_{1}=18$ patients ($n_{0}$ denotes the number of patients in the control arm and $n_{1}$ denotes the number of patients in the experimental arm; The index $I$ stands for 'interim') which corresponds to 50% of the fixed sample size.
+The following figure summarises the trial design. Suppose we randomise patients with a 2:1 allocation ratio to the experimental arm and the control arm. Let $p_i$ be the TD proportion coming from a design prior $\pi^d_i \sim Beta(a^d_i,b^d_i)$, $p_i$, $i=0,1$. The design prior represents the uncertainty of $p_i$ at the design stage and might be different from the analysis prior. One interim analysis will be performed after the recruitment of $N^{I}=n_{0}+n_{1}=18$ patients ($n_{0}$ denotes the number of patients in the control arm and $n_{1}$ denotes the number of patients in the experimental arm; The index $I$ stands for 'interim') which corresponds to 50% of the fixed sample size.
 
 ```{mermaid}
 flowchart TD
-  A[2:1 randomisation] --> B[Experimental group with CD proportion \np1 coming from design prior]
-  A --> C[Control group with CD proportion \np0 coming from design prior]
+  A[2:1 randomisation] --> B[Experimental group with TD proportion \np1 coming from design prior]
+  A --> C[Control group with TD proportion \np0 coming from design prior]
   B ~~~ D[Interim analysis\n\nStop early:\nIf experimental group has a high predictive probability of excessive discontinuation\notherwise randomise new patients until N_max is reached]
   C ~~~ D
   style A fill:white,color:black
@@ -56,7 +38,7 @@ flowchart TD
 
 ### Stopping criterium
 
-The excessive threshold for stopping the trial was set to $p_{max}=0.2$. This number was based on the design prior choice (see subsection 'Design prior choice'). In brief, based on a discussion with clinical experts and available evidence the assumed mean average CD proportion was set to $0.1$. A doubling of this number led to $p_{max}=0.2$. 
+The excessive threshold for stopping the trial was set to $p_{max}=0.2$. This number was based on the design prior choice (see subsection 'Design prior choice'). In brief, based on a discussion with clinical experts and available evidence the assumed mean average TD proportion was set to $0.1$. A doubling of this number led to $p_{max}=0.2$. 
 
 ### Statistical methods
 
@@ -199,7 +181,7 @@ stop_boundaries %>% filter(n==12)
 
 #### Design prior choice
 
-The design prior for the primary endpoint was chosen as based on clinical expert knowledge and available evidence. The TOPAZ-I trial reported 8.9% AE leading to discontinuation, while KENOTE 966 reported a discontinuation proportion of 3%. We decided to be a bit more conservative with an average CD proportion of 10%, while accounting for uncertainty in this assumed proportion: We assumed that the "true" CD proportion comes from a $Beta(1.2,10.8)$ design prior which is centered at a CD proportion of 10% with a 90% uncertainty range from 0.9% to 26.6%. The probability that the discontinuation rate is larger than 20% is 12.2%. The design prior has weight of 12 patients, that is, half of planned patients in the experimental arm.
+The design prior for the primary endpoint was chosen as based on clinical expert knowledge and available evidence. We assumed that the "true" TD proportion comes from a $Beta(1.2,10.8)$ design prior which is centered at a TD proportion of 10% with a 90% uncertainty range from 0.9% to 26.6%. The probability that the discontinuation rate is larger than 20% is 12.2%. The design prior has weight of 12 patients, that is, half of planned patients in the experimental arm.
 
 ```{r}
 #| echo: false
@@ -239,7 +221,7 @@ fig
 
 As analysis priors we decided for two scenarios.
 
-- A skeptical Beta(2.4, 9.4) analysis prior for the experimental arm which is centered on a CD proportion of 20% with a probability of excessing 40% of $5.6$%.
+- A skeptical Beta(2.4, 9.4) analysis prior for the experimental arm which is centered on a TD proportion of 20% with a probability of excessing 40% of $5.6$%.
 - A neutral Beta(0.6, 5.4) analysis prior for the experimental arm which is centered on a discontinuation proportion of 10%. 
 
 ```{r}
