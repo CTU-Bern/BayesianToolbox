@@ -293,9 +293,64 @@
     "href": "01-SampleSize.html",
     "title": "Sample size",
     "section": "",
-    "text": "This section covers examples related to the topic of sample size.",
+    "text": "This section covers specific the examples of the topic of ‘sample size’.",
     "crumbs": [
       "Sample size"
+    ]
+  },
+  {
+    "objectID": "01-SampleSize_Bayesian_power_basics_examples.html",
+    "href": "01-SampleSize_Bayesian_power_basics_examples.html",
+    "title": "3  External resources and references",
+    "section": "",
+    "text": "3.1 Peer-reviewed articles",
+    "crumbs": [
+      "Sample size",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>External resources and references</span>"
+    ]
+  },
+  {
+    "objectID": "01-SampleSize_Bayesian_power_basics_examples.html#peer-reviewed-articles",
+    "href": "01-SampleSize_Bayesian_power_basics_examples.html#peer-reviewed-articles",
+    "title": "3  External resources and references",
+    "section": "",
+    "text": "A Review of Bayesian Perspectives on Sample Size Derivation for Confirmatory Trials (2021).\nhttps://pubmed.ncbi.nlm.nih.gov/34992303/\nBayesian sample size determination for diagnostic accuracy studies (2022).\nhttps://onlinelibrary.wiley.com/doi/10.1002/sim.9393\nBayesian estimation supersedes the t test (2013).\nhttps://psycnet.apa.org/doiLanding?doi=10.1037%2Fa0029146\nThe Bayesian New Statistics: Hypothesis testing, estimation, meta-analysis, and power analysis from a Bayesian perspective (2017) https://link.springer.com/article/10.3758/s13423-016-1221-4\nBayesian and mixed bayesian/likelihood criteria for sample size determination https://onlinelibrary.wiley.com/doi/10.1002/(SICI)1097-0258(19970415)16:7%3C769::AID-SIM495%3E3.0.CO;2-V",
+    "crumbs": [
+      "Sample size",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>External resources and references</span>"
+    ]
+  },
+  {
+    "objectID": "01-SampleSize_Bayesian_power_basics_examples.html#blog-posts",
+    "href": "01-SampleSize_Bayesian_power_basics_examples.html#blog-posts",
+    "title": "3  External resources and references",
+    "section": "3.2 Blog posts",
+    "text": "3.2 Blog posts\n\nIntroduction to bayesian clinical trial designs (detailed - including R code examples)\nhttps://hbiostat.org/bayes/bet/design\nIntroduction to bayesian sample size calculation (including R code example) https://www.rdatagen.net/post/2021-06-01-bayesian-power-analysis/\nIntroduction to bayesian “power” and comparison with frequentist approaches (including R code example):\nhttps://solomonkurz.netlify.app/blog/bayesian-power-analysis-part-i/ https://solomonkurz.netlify.app/blog/bayesian-power-analysis-part-ii/\nBrief introduction to bayesian power - including comparison with frequentist terms:\nhttps://anatomisebiostats.com/biostatistics-blog/bayesian-sample-size-estimation-in-clinical-study-design-rtcs/\nStopping rules using bayesian analyses https://statmodeling.stat.columbia.edu/2014/02/13/stopping-rules-bayesian-analysis/ http://varianceexplained.org/r/bayesian-ab-testing/",
+    "crumbs": [
+      "Sample size",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>External resources and references</span>"
+    ]
+  },
+  {
+    "objectID": "01-SampleSize_Bayesian_power_basics_examples.html#r-packages-and-online-tools",
+    "href": "01-SampleSize_Bayesian_power_basics_examples.html#r-packages-and-online-tools",
+    "title": "3  External resources and references",
+    "section": "3.3 R packages and online tools",
+    "text": "3.3 R packages and online tools\n\nPackage ‘SampleSizeProportions’ (2023)\nCalculating Sample Size Requirements when Estimating the Difference Between Two Binomial Proportions https://cran.rstudio.com/web/packages/SampleSizeProportions/index.html\nPackage ‘BayesPPD’ (2021)\nBayesian sample size determination using the power and normalized power prior for generalized linear models https://rdrr.io/cran/BayesPPD/man/BayesPPD-package.html\nPackage ‘BayesPPDSurv’ (2024)\nBayesian power/type I error calculation and model fitting using the power prior and the normalized power prior for proportional hazards models with piecewise constant hazard. https://cran.r-project.org/web/packages/BayesPPDSurv/index.html\nPackage ‘BayesCTDesign’ (2021)\nTwo Arm Bayesian Clinical Trial Design with and Without Historical Control Data https://cran.r-project.org/web/packages/BayesCTDesign/index.html\nPackage ‘BayesFactor’ (2024)\nA suite of functions for computing various Bayes factors for simple designs, including contingency tables, one- and two-sample designs, one-way designs, general ANOVA designs, and linear regression. https://cran.r-project.org/web/packages/BayesFactor/index.html\ntrialdesign.org\nAn online resource platform for several phase-I and phase-II designs. https://www.trialdesign.org",
+    "crumbs": [
+      "Sample size",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>External resources and references</span>"
+    ]
+  },
+  {
+    "objectID": "01-SampleSize_Bayesian_power_basics_examples.html#author",
+    "href": "01-SampleSize_Bayesian_power_basics_examples.html#author",
+    "title": "3  External resources and references",
+    "section": "Author",
+    "text": "Author\nSylvain Losdat, PhD\nDepartment of Clinical Research\nUniversity of Bern\n3012 Bern, Switzerland",
+    "crumbs": [
+      "Sample size",
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>External resources and references</span>"
     ]
   }
 ]
