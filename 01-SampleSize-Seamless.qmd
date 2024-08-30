@@ -1,0 +1,24 @@
+# Seamless phase-II/III study
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(ggplot2)
+library(tidyverse)
+library(splitstackshape)
+library(extraDistr)
+```
+
+This vignette was motivated by a study of CTU Bern (1938). It is an example of a Bayesian seamless phase-II/III design. The primary endpoint is a binary endpoint, say, treatment discontinuation (TD).
+
+
+## Methods
+
+## Author {-}
+
+André Moser, Senior Statistician\
+Iulia-Maia Muresan, Statistician\
+Department of Clinical Research\
+University of Bern\
+3012 Bern, Switzerland
