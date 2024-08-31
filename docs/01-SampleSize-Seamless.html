@@ -20,7 +20,60 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -53,6 +106,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -150,7 +232,16 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#methods" id="toc-methods" class="nav-link active" data-scroll-target="#methods"><span class="header-section-number">3.1</span> Methods</a></li>
+  <li><a href="#available-evidence" id="toc-available-evidence" class="nav-link active" data-scroll-target="#available-evidence"><span class="header-section-number">3.1</span> Available evidence</a></li>
+  <li><a href="#endpoints" id="toc-endpoints" class="nav-link" data-scroll-target="#endpoints"><span class="header-section-number">3.2</span> Endpoints</a></li>
+  <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses"><span class="header-section-number">3.3</span> Hypotheses</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">3.4</span> Methods</a>
+  <ul>
+  <li><a href="#gaussian-approximation" id="toc-gaussian-approximation" class="nav-link" data-scroll-target="#gaussian-approximation"><span class="header-section-number">3.4.1</span> Gaussian approximation</a></li>
+  <li><a href="#early-stopping-phase-ii" id="toc-early-stopping-phase-ii" class="nav-link" data-scroll-target="#early-stopping-phase-ii"><span class="header-section-number">3.4.2</span> Early stopping phase-II</a></li>
+  <li><a href="#decision-for-phase-iii" id="toc-decision-for-phase-iii" class="nav-link" data-scroll-target="#decision-for-phase-iii"><span class="header-section-number">3.4.3</span> Decision for phase-III</a></li>
+  <li><a href="#simulation-assumptions" id="toc-simulation-assumptions" class="nav-link" data-scroll-target="#simulation-assumptions"><span class="header-section-number">3.4.4</span> Simulation assumptions</a></li>
+  </ul></li>
   <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   </ul>
 </nav>
@@ -166,9 +257,129 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>This vignette was motivated by a study of CTU Bern (1938). It is an example of a Bayesian seamless phase-II/III design. The primary endpoint is a binary endpoint, say, treatment discontinuation (TD).</p>
-<section id="methods" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="methods"><span class="header-section-number">3.1</span> Methods</h2>
+<p><strong>THIS VIGNETTE IS STILL WORK IN PROGRESS</strong></p>
+<p>This vignette was motivated by a consulting of CTU Bern (C2597). It is an example of a Bayesian seamless phase-II/III design with a correlated adverse event endpoint and a time-to-event primary endpoint.</p>
+<section id="available-evidence" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="available-evidence"><span class="header-section-number">3.1</span> Available evidence</h2>
+<p>For the control arm we used information from a published randomized controlled trial. The authors reported from approximately 350 total randomized patients to a control arm a disease-free survival percentage of approximately 50% at 24-months. For our sample size calculation we assumed a slightly more conservative percentage of 45%.</p>
+<p>For the experimental arm we use information from another study with a similar intervention which reported an approximate 70% progression-free survival at 24 months. We assumed a more conservative 60% progression-free survival at 24-months in the experimental arm.</p>
+<p>For adverse events outcomes (defined by grade 3 CTCAE) we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.</p>
+<p>No assumptions for the correlation between adverse events and disease-free survival were reported.</p>
+</section>
+<section id="endpoints" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="endpoints"><span class="header-section-number">3.2</span> Endpoints</h2>
+<p><strong>Primary endpoint</strong>: Disease-free survival at 24-months (phase-III endpoint)</p>
+<p><strong>Safety endpoint</strong>: Adverse events in experimental arm (for phase-II part)</p>
+</section>
+<section id="hypotheses" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="hypotheses"><span class="header-section-number">3.3</span> Hypotheses</h2>
+<p>We consider the following one-sided hypotheses</p>
+<ul>
+<li>Null hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is greater or equal than zero, that is, <span class="math inline">\(H_0: \theta \geq 0\)</span></li>
+<li>Alternative hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is smaller than zero, that is, <span class="math inline">\(H_0: \theta&lt;0\)</span></li>
+</ul>
+</section>
+<section id="methods" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="methods"><span class="header-section-number">3.4</span> Methods</h2>
+<section id="gaussian-approximation" class="level3" data-number="3.4.1">
+<h3 data-number="3.4.1" class="anchored" data-anchor-id="gaussian-approximation"><span class="header-section-number">3.4.1</span> Gaussian approximation</h3>
+<p>We approximate the log hazard ratio of disease-free survival by <span class="math display">\[
+\theta=log(HR)=\frac{log(s_1)}{log(s_0)}
+\]</span> where <span class="math inline">\(s_1\)</span> is the disease-free survival probability of the experimental arm and <span class="math inline">\(s_0\)</span> is the disease-free survival probability of the control arm. In our case we have <span class="math inline">\(s_1=0.6\)</span> and <span class="math inline">\(s_0=0.45\)</span> leading to a <span class="math inline">\(log(HR)=0.64\)</span>.</p>
+<p>We approximate the variance of <span class="math inline">\(\theta\)</span> with <span class="math inline">\(4/m\)</span>, where <span class="math inline">\(m\)</span> is the number of events (see <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 2.4.2).</p>
+</section>
+<section id="early-stopping-phase-ii" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="early-stopping-phase-ii"><span class="header-section-number">3.4.2</span> Early stopping phase-II</h3>
+<p>We planned the phase-II part with an a priori fixed sample size because of feasibility and resources. We plan an safety interim analysis which assess’ an excess adverse event proportion using a Bayesian predictive probability. If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.</p>
+</section>
+<section id="decision-for-phase-iii" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="decision-for-phase-iii"><span class="header-section-number">3.4.3</span> Decision for phase-III</h3>
+<p>The decision to continue seamlessly into a phase-III trial is based on two criteria</p>
+<ul>
+<li><ol type="1">
+<li>We stop the trial at the end of phase-II part if there is a high probability for excess adverse events.</li>
+</ol></li>
+<li><ol start="2" type="1">
+<li>If we have a low predictive probability for a successful phase-III trial at the end of phase-II.</li>
+</ol></li>
+</ul>
+<p>For the latter approach we use a Bayesian predictive ‘interim monitoring’ approach as described in <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data), the prior information and the assumed number of ‘future’ phase-III patients to calculate the predictive probability for a trial success that is we calculate</p>
+<p><span class="math display">\[
+P(\theta&lt;0|y_m, Y_n)\geq 95\%,
+\]</span> which is</p>
+<p><span class="math display">\[
+1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{0.95} \right],
+\]</span> where <span class="math inline">\(z_{0.95}\)</span> is the upper 95%-quantile of a Gaussian distribution. Because of the phase-II character we used a higher “one-sided” success probability of 95%. For the phase-III part we use a success probability of 97.5% as threshold.</p>
+</section>
+<section id="simulation-assumptions" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="simulation-assumptions"><span class="header-section-number">3.4.4</span> Simulation assumptions</h3>
+<p>We assumed bivariate exponentially distributed time to event outcomes for adverse events and disease-free survival. We used the following componentwise rate parameters</p>
+<table class="table">
+<colgroup>
+<col style="width: 88%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Exponential rate parameter for time to disease progression or death (control arm)</td>
+<td>1/30</td>
+</tr>
+<tr class="even">
+<td>Exponential rate parameter for time to disease progression or death (experimental arm)</td>
+<td>1/47</td>
+</tr>
+<tr class="odd">
+<td>Exponential rate parameter for adverse events (experimental arm)</td>
+<td>1/37</td>
+</tr>
+</tbody>
+</table>
+<p>for simulating data. Based on these parameters we get the proportion of disease progression or death at 24-months in the control arm,</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rate_event_0 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">30</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportion of patients with disease progression or death in control arm at 24-months </span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">24</span>, rate_event_0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.550671</code></pre>
+</div>
+</div>
+<p>and in the experimental arm,</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>rate_event_1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">47</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportion of patients with disease progression or death in experimental arm at 24-months </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">24</span>, rate_event_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3998876</code></pre>
+</div>
+</div>
+<p>and the proportion of adverse events at 6-months in the experimental arm</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Show R code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rate_tox_1 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">47</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Proportion of patients with disease progression or death in experimental arm at 6-months </span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pexp</span>(<span class="dv">6</span>, rate_tox_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.119847</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="author" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="author">Author</h2>
@@ -179,6 +390,11 @@ University of Bern<br>
 3012 Bern, Switzerland</p>
 
 
+<div id="refs" class="references csl-bib-body" role="list" style="display: none">
+<div id="ref-Spiegelhalter2003" class="csl-entry" role="listitem">
+<div class="csl-left-margin">1. </div><div class="csl-right-inline">Spiegelhalter DJ, Abrams KR, Myles JP. Bayesian approaches to clinical trials and health‐care evaluation. Wiley; 2003. doi:<a href="https://doi.org/10.1002/0470092602">10.1002/0470092602</a></div>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->

@@ -1,5 +1,7 @@
 # Seamless phase-II/III study
 
+**THIS VIGNETTE IS STILL WORK IN PROGRESS**
+
 ```{r}
 #| echo: false
 #| warning: false
@@ -10,10 +12,113 @@ library(splitstackshape)
 library(extraDistr)
 ```
 
-This vignette was motivated by a study of CTU Bern (1938). It is an example of a Bayesian seamless phase-II/III design. The primary endpoint is a binary endpoint, say, treatment discontinuation (TD).
+This vignette was motivated by a consulting of CTU Bern (C2597). It is an example of a Bayesian seamless phase-II/III design with a correlated adverse event endpoint and a time-to-event primary endpoint.
 
+## Available evidence
+
+For the control arm we used information from a published randomized controlled trial. The authors reported from approximately 350 total randomized patients to a control arm a disease-free survival percentage of approximately 50% at 24-months. For our sample size calculation we assumed a slightly more conservative percentage of 45%.
+
+For the experimental arm we use information from another study with a similar intervention which reported an approximate 70% progression-free survival at 24 months. We assumed a more conservative 60% progression-free survival at 24-months in the experimental arm.
+
+For adverse events outcomes (defined by grade 3 CTCAE) we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.
+
+No assumptions for the correlation between adverse events and disease-free survival were reported.
+
+## Endpoints
+
+**Primary endpoint**: Disease-free survival at 24-months (phase-III endpoint)
+
+**Safety endpoint**: Adverse events in experimental arm (for phase-II part)
+
+## Hypotheses
+
+We consider the following one-sided hypotheses
+
+- Null hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is greater or equal than zero, that is, $H_0: \theta \geq 0$
+- Alternative hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is smaller than zero, that is, $H_0: \theta<0$
 
 ## Methods
+
+### Gaussian approximation
+
+We approximate the log hazard ratio of disease-free survival by
+$$
+\theta=log(HR)=\frac{log(s_1)}{log(s_0)}
+$$
+where $s_1$ is the disease-free survival probability of the experimental arm and $s_0$ is the disease-free survival probability of the control arm. In our case we have $s_1=0.6$ and $s_0=0.45$ leading to a $log(HR)=0.64$.
+
+We approximate the variance of $\theta$ with $4/m$, where $m$ is the number of events (see @Spiegelhalter2003, chapter 2.4.2).
+
+### Early stopping phase-II
+
+We planned the phase-II part with an a priori fixed sample size because of feasibility and resources. We plan an safety interim analysis which assess' an excess adverse event proportion using a Bayesian predictive probability. If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.
+
+### Decision for phase-III
+
+The decision to continue seamlessly into a phase-III trial is based on two criteria
+
+- 1) We stop the trial at the end of phase-II part if there is a high probability for excess adverse events.
+- 2) If we have a low predictive probability for a successful phase-III trial at the end of phase-II.
+
+For the latter approach we use a Bayesian predictive 'interim monitoring' approach as described in @Spiegelhalter2003, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data), the prior information and the assumed number of 'future' phase-III patients to calculate the predictive probability for a trial success that is we calculate
+
+$$
+P(\theta<0|y_m, Y_n)\geq 95\%,
+$$
+which is
+
+$$
+1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{0.95} \right],
+$$
+where $z_{0.95}$ is the upper 95%-quantile of a Gaussian distribution. Because of the phase-II character we used a higher "one-sided" success probability of 95%. For the phase-III part we use a success probability of 97.5% as threshold.
+
+
+
+
+### Simulation assumptions
+
+We assumed bivariate exponentially distributed time to event outcomes for adverse events and disease-free survival. We used the following componentwise rate parameters
+
+| Parameter                                                            | Value   |
+|----------------------------------------------------------------------|---------|
+| Exponential rate parameter for time to disease progression or death (control arm) | 1/30      |
+| Exponential rate parameter for time to disease progression or death (experimental arm) | 1/47     |
+| Exponential rate parameter for adverse events (experimental arm) | 1/37      |
+
+for simulating data. Based on these parameters we get the proportion of disease progression or death at 24-months in the control arm,
+
+```{r}
+#| echo: true
+#| warning: false
+
+rate_event_0 <- 1/30
+
+# Proportion of patients with disease progression or death in control arm at 24-months 
+pexp(24, rate_event_0)
+```
+
+and in the experimental arm,
+```{r}
+#| echo: true
+#| warning: false
+
+rate_event_1 <- 1/47
+
+# Proportion of patients with disease progression or death in experimental arm at 24-months 
+pexp(24, rate_event_1)
+```
+
+and the proportion of adverse events at 6-months in the experimental arm
+
+```{r}
+#| echo: true
+#| warning: false
+
+rate_tox_1 <- 1/47
+
+# Proportion of patients with disease progression or death in experimental arm at 6-months 
+pexp(6, rate_tox_1)
+```
 
 ## Author {-}
 
