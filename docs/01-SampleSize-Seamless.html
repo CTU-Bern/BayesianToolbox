@@ -233,14 +233,15 @@ window.Quarto = {
    
   <ul>
   <li><a href="#available-evidence" id="toc-available-evidence" class="nav-link active" data-scroll-target="#available-evidence"><span class="header-section-number">3.1</span> Available evidence</a></li>
-  <li><a href="#endpoints" id="toc-endpoints" class="nav-link" data-scroll-target="#endpoints"><span class="header-section-number">3.2</span> Endpoints</a></li>
+  <li><a href="#endpoints-and-testing-hierarchy" id="toc-endpoints-and-testing-hierarchy" class="nav-link" data-scroll-target="#endpoints-and-testing-hierarchy"><span class="header-section-number">3.2</span> Endpoints and testing hierarchy</a></li>
   <li><a href="#hypotheses" id="toc-hypotheses" class="nav-link" data-scroll-target="#hypotheses"><span class="header-section-number">3.3</span> Hypotheses</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods"><span class="header-section-number">3.4</span> Methods</a>
   <ul>
   <li><a href="#gaussian-approximation" id="toc-gaussian-approximation" class="nav-link" data-scroll-target="#gaussian-approximation"><span class="header-section-number">3.4.1</span> Gaussian approximation</a></li>
-  <li><a href="#early-stopping-phase-ii" id="toc-early-stopping-phase-ii" class="nav-link" data-scroll-target="#early-stopping-phase-ii"><span class="header-section-number">3.4.2</span> Early stopping phase-II</a></li>
-  <li><a href="#decision-for-phase-iii" id="toc-decision-for-phase-iii" class="nav-link" data-scroll-target="#decision-for-phase-iii"><span class="header-section-number">3.4.3</span> Decision for phase-III</a></li>
-  <li><a href="#simulation-assumptions" id="toc-simulation-assumptions" class="nav-link" data-scroll-target="#simulation-assumptions"><span class="header-section-number">3.4.4</span> Simulation assumptions</a></li>
+  <li><a href="#phase-ii-part" id="toc-phase-ii-part" class="nav-link" data-scroll-target="#phase-ii-part"><span class="header-section-number">3.4.2</span> Phase-II part</a></li>
+  <li><a href="#early-stopping-phase-ii" id="toc-early-stopping-phase-ii" class="nav-link" data-scroll-target="#early-stopping-phase-ii"><span class="header-section-number">3.4.3</span> Early stopping phase-II</a></li>
+  <li><a href="#decision-for-phase-iii" id="toc-decision-for-phase-iii" class="nav-link" data-scroll-target="#decision-for-phase-iii"><span class="header-section-number">3.4.4</span> Decision for phase-III</a></li>
+  <li><a href="#simulation-assumptions" id="toc-simulation-assumptions" class="nav-link" data-scroll-target="#simulation-assumptions"><span class="header-section-number">3.4.5</span> Simulation assumptions</a></li>
   </ul></li>
   <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   </ul>
@@ -266,14 +267,15 @@ window.Quarto = {
 <p>For adverse events outcomes (defined by grade 3 CTCAE) we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.</p>
 <p>No assumptions for the correlation between adverse events and disease-free survival were reported.</p>
 </section>
-<section id="endpoints" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="endpoints"><span class="header-section-number">3.2</span> Endpoints</h2>
-<p><strong>Primary endpoint</strong>: Disease-free survival at 24-months (phase-III endpoint)</p>
+<section id="endpoints-and-testing-hierarchy" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="endpoints-and-testing-hierarchy"><span class="header-section-number">3.2</span> Endpoints and testing hierarchy</h2>
 <p><strong>Safety endpoint</strong>: Adverse events in experimental arm (for phase-II part)</p>
+<p><strong>Primary endpoint</strong>: Disease-free survival at 24-months (phase-III endpoint)</p>
+<p>We test the endpoints in a hierarchical way: Only if a pre-specified high probability for an excess adverse event proportion exists, the primary endpoint will be assessed for a continuation into a phase-III study.</p>
 </section>
 <section id="hypotheses" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="hypotheses"><span class="header-section-number">3.3</span> Hypotheses</h2>
-<p>We consider the following one-sided hypotheses</p>
+<p>We consider the following one-sided hypotheses for the phase-III trial</p>
 <ul>
 <li>Null hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is greater or equal than zero, that is, <span class="math inline">\(H_0: \theta \geq 0\)</span></li>
 <li>Alternative hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is smaller than zero, that is, <span class="math inline">\(H_0: \theta&lt;0\)</span></li>
@@ -288,22 +290,33 @@ window.Quarto = {
 \]</span> where <span class="math inline">\(s_1\)</span> is the disease-free survival probability of the experimental arm and <span class="math inline">\(s_0\)</span> is the disease-free survival probability of the control arm. In our case we have <span class="math inline">\(s_1=0.6\)</span> and <span class="math inline">\(s_0=0.45\)</span> leading to a <span class="math inline">\(log(HR)=0.64\)</span>.</p>
 <p>We approximate the variance of <span class="math inline">\(\theta\)</span> with <span class="math inline">\(4/m\)</span>, where <span class="math inline">\(m\)</span> is the number of events (see <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 2.4.2).</p>
 </section>
-<section id="early-stopping-phase-ii" class="level3" data-number="3.4.2">
-<h3 data-number="3.4.2" class="anchored" data-anchor-id="early-stopping-phase-ii"><span class="header-section-number">3.4.2</span> Early stopping phase-II</h3>
-<p>We planned the phase-II part with an a priori fixed sample size because of feasibility and resources. We plan an safety interim analysis which assess’ an excess adverse event proportion using a Bayesian predictive probability. If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.</p>
+<section id="phase-ii-part" class="level3" data-number="3.4.2">
+<h3 data-number="3.4.2" class="anchored" data-anchor-id="phase-ii-part"><span class="header-section-number">3.4.2</span> Phase-II part</h3>
+<p>We plan the phase-II part with an an priori fixed sample size because of feasibility and resources discussed with clinicians. A safety interim analysis is planned</p>
 </section>
-<section id="decision-for-phase-iii" class="level3" data-number="3.4.3">
-<h3 data-number="3.4.3" class="anchored" data-anchor-id="decision-for-phase-iii"><span class="header-section-number">3.4.3</span> Decision for phase-III</h3>
+<section id="early-stopping-phase-ii" class="level3" data-number="3.4.3">
+<h3 data-number="3.4.3" class="anchored" data-anchor-id="early-stopping-phase-ii"><span class="header-section-number">3.4.3</span> Early stopping phase-II</h3>
+<p>We plan an safety interim analysis which assess’ the probability for an excess adverse event proportion using a Bayesian predictive probability in the *experimental arm**.</p>
+<p>The trial is stopped early if <span class="math inline">\(PP&gt;\theta_{S}\)</span>, for an upper discontinuation proportion threshold <span class="math inline">\(p_{max}\)</span>, <span class="math display">\[
+\begin{aligned}
+PP&amp;=E\left[I\left\{ P\left(p_1&gt;p_{max}|r_{1}, n_{1}, s_{1}\right)&gt;\theta_{T_{Non-safe}}\right\}|r_{1}, n_{1}\right] \\
+&amp;=\sum_{s_1=0}^{m_1} I(P(p_1 &gt; p_{max}|r_{1},n_1,s_1)&gt;\theta_{T_{Non-safe}}) P(S_{1}=s_1|r_{1}, n_1),
+\end{aligned}
+\]</span> where <span class="math inline">\(r_1\)</span> (number of observed adverse events at interim analysis), <span class="math inline">\(n_1\)</span> (number of patients at interim analysis), <span class="math inline">\(s_1\)</span> (expected future events at interim analysis) and a threshold <span class="math inline">\(\theta_{T_{Non-safe}}\)</span>.</p>
+<p>If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.</p>
+</section>
+<section id="decision-for-phase-iii" class="level3" data-number="3.4.4">
+<h3 data-number="3.4.4" class="anchored" data-anchor-id="decision-for-phase-iii"><span class="header-section-number">3.4.4</span> Decision for phase-III</h3>
 <p>The decision to continue seamlessly into a phase-III trial is based on two criteria</p>
 <ul>
 <li><ol type="1">
-<li>We stop the trial at the end of phase-II part if there is a high probability for excess adverse events.</li>
+<li>We stop the trial at the end of phase-II part if there is a high probability for excess adverse events (same as described above).</li>
 </ol></li>
 <li><ol start="2" type="1">
 <li>If we have a low predictive probability for a successful phase-III trial at the end of phase-II.</li>
 </ol></li>
 </ul>
-<p>For the latter approach we use a Bayesian predictive ‘interim monitoring’ approach as described in <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data), the prior information and the assumed number of ‘future’ phase-III patients to calculate the predictive probability for a trial success that is we calculate</p>
+<p>For the latter approach we use a Bayesian predictive ‘interim monitoring’ approach as described in <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data <span class="math inline">\(y_m\)</span>), the prior information and the assumed number of ‘future’ phase-III patients (<span class="math inline">\(Y_n\)</span>) to calculate the predictive probability for a trial success that is we calculate</p>
 <p><span class="math display">\[
 P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 \]</span> which is</p>
@@ -311,8 +324,8 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{0.95} \right],
 \]</span> where <span class="math inline">\(z_{0.95}\)</span> is the upper 95%-quantile of a Gaussian distribution. Because of the phase-II character we used a higher “one-sided” success probability of 95%. For the phase-III part we use a success probability of 97.5% as threshold.</p>
 </section>
-<section id="simulation-assumptions" class="level3" data-number="3.4.4">
-<h3 data-number="3.4.4" class="anchored" data-anchor-id="simulation-assumptions"><span class="header-section-number">3.4.4</span> Simulation assumptions</h3>
+<section id="simulation-assumptions" class="level3" data-number="3.4.5">
+<h3 data-number="3.4.5" class="anchored" data-anchor-id="simulation-assumptions"><span class="header-section-number">3.4.5</span> Simulation assumptions</h3>
 <p>We assumed bivariate exponentially distributed time to event outcomes for adverse events and disease-free survival. We used the following componentwise rate parameters</p>
 <table class="table">
 <colgroup>

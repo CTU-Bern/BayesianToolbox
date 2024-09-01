@@ -16,23 +16,25 @@ This vignette was motivated by a consulting of CTU Bern (C2597). It is an exampl
 
 ## Available evidence
 
-For the control arm we used information from a published randomized controlled trial. The authors reported from approximately 350 total randomized patients to a control arm a disease-free survival percentage of approximately 50% at 24-months. For our sample size calculation we assumed a slightly more conservative percentage of 45%.
+For the **control arm** we used information from a published randomized controlled trial. The authors reported from approximately 350 total randomized patients to a control arm a disease-free survival percentage of approximately 50% at 24-months. For our sample size calculation we assumed a slightly more conservative percentage of 45%.
 
-For the experimental arm we use information from another study with a similar intervention which reported an approximate 70% progression-free survival at 24 months. We assumed a more conservative 60% progression-free survival at 24-months in the experimental arm.
+For the **experimental arm** we use information from another study with a similar intervention which reported an approximate 70% progression-free survival at 24 months. We assumed a more conservative 60% progression-free survival at 24-months in the experimental arm.
 
-For adverse events outcomes (defined by grade 3 CTCAE) we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.
+For **adverse events outcomes** (defined by grade 3 CTCAE) in the experimental arm we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.
 
 No assumptions for the correlation between adverse events and disease-free survival were reported.
 
-## Endpoints
-
-**Primary endpoint**: Disease-free survival at 24-months (phase-III endpoint)
+## Endpoints and testing hierarchy
 
 **Safety endpoint**: Adverse events in experimental arm (for phase-II part)
 
+**Primary endpoint**: Disease-free survival at 24-months (phase-III endpoint)
+
+We test the endpoints in a hierarchical way: Only if a pre-specified high probability for an excess adverse event proportion exists, the primary endpoint will be assessed for a continuation into a phase-III study.
+
 ## Hypotheses
 
-We consider the following one-sided hypotheses
+We consider the following one-sided hypotheses for the phase-III trial
 
 - Null hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is greater or equal than zero, that is, $H_0: \theta \geq 0$
 - Alternative hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is smaller than zero, that is, $H_0: \theta<0$
@@ -49,18 +51,33 @@ where $s_1$ is the disease-free survival probability of the experimental arm and
 
 We approximate the variance of $\theta$ with $4/m$, where $m$ is the number of events (see @Spiegelhalter2003, chapter 2.4.2).
 
+### Phase-II part
+
+We plan the phase-II part with an an priori fixed sample size because of feasibility and resources discussed with clinicians. A safety interim analysis is planned
+
 ### Early stopping phase-II
 
-We planned the phase-II part with an a priori fixed sample size because of feasibility and resources. We plan an safety interim analysis which assess' an excess adverse event proportion using a Bayesian predictive probability. If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.
+We plan an safety interim analysis which assess' the probability for an excess adverse event proportion using a Bayesian predictive probability in the *experimental arm**.
+
+The trial is stopped early if $PP>\theta_{S}$, for an upper discontinuation proportion threshold $p_{max}$,
+$$
+\begin{aligned}
+PP&=E\left[I\left\{ P\left(p_1>p_{max}|r_{1}, n_{1}, s_{1}\right)>\theta_{T_{Non-safe}}\right\}|r_{1}, n_{1}\right] \\
+&=\sum_{s_1=0}^{m_1} I(P(p_1 > p_{max}|r_{1},n_1,s_1)>\theta_{T_{Non-safe}}) P(S_{1}=s_1|r_{1}, n_1),
+\end{aligned}
+$$
+where $r_1$ (number of observed adverse events at interim analysis), $n_1$ (number of patients at interim analysis), $s_1$ (expected future events at interim analysis) and a threshold $\theta_{T_{Non-safe}}$.
+
+If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.
 
 ### Decision for phase-III
 
 The decision to continue seamlessly into a phase-III trial is based on two criteria
 
-- 1) We stop the trial at the end of phase-II part if there is a high probability for excess adverse events.
+- 1) We stop the trial at the end of phase-II part if there is a high probability for excess adverse events (same as described above).
 - 2) If we have a low predictive probability for a successful phase-III trial at the end of phase-II.
 
-For the latter approach we use a Bayesian predictive 'interim monitoring' approach as described in @Spiegelhalter2003, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data), the prior information and the assumed number of 'future' phase-III patients to calculate the predictive probability for a trial success that is we calculate
+For the latter approach we use a Bayesian predictive 'interim monitoring' approach as described in @Spiegelhalter2003, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data $y_m$), the prior information and the assumed number of 'future' phase-III patients ($Y_n$) to calculate the predictive probability for a trial success that is we calculate
 
 $$
 P(\theta<0|y_m, Y_n)\geq 95\%,
@@ -72,8 +89,9 @@ $$
 $$
 where $z_{0.95}$ is the upper 95%-quantile of a Gaussian distribution. Because of the phase-II character we used a higher "one-sided" success probability of 95%. For the phase-III part we use a success probability of 97.5% as threshold.
 
+#### Competing risk
 
-
+An adverse event is a competing event for progression or death. For the sample size calculation we 'replaced' patients with an adverse event with new phase-III patients. In the statistical analysis a competing event analysis is required.
 
 ### Simulation assumptions
 
