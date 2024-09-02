@@ -39,6 +39,22 @@ We consider the following one-sided hypotheses for the phase-III trial
 - Null hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is greater or equal than zero, that is, $H_0: \theta \geq 0$
 - Alternative hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is smaller than zero, that is, $H_0: \theta<0$
 
+## Trial structure
+
+```{mermaid}
+gantt
+    title Seamless Phase-II/III design
+    dateFormat X
+    axisFormat %s
+    section Phase-II
+    Interim phase-II: active, 0, 40
+    Phase-II: 0, 120
+    Evaluation for Phase-III: crit, 0, 120
+    section Phase-III
+    Phase-III: 0, 560
+```  
+
+
 ## Methods
 
 ### Gaussian approximation
@@ -57,7 +73,7 @@ We plan the phase-II part with an an priori fixed sample size because of feasibi
 
 ### Early stopping phase-II
 
-We plan an safety interim analysis which assess' the probability for an excess adverse event proportion using a Bayesian predictive probability in the *experimental arm**.
+We plan an safety interim analysis which assess' the probability for an excess adverse event proportion using a Bayesian predictive probability in the **experimental arm**.
 
 The trial is stopped early if $PP>\theta_{S}$, for an upper discontinuation proportion threshold $p_{max}$,
 $$
@@ -69,6 +85,7 @@ $$
 where $r_1$ (number of observed adverse events at interim analysis), $n_1$ (number of patients at interim analysis), $s_1$ (expected future events at interim analysis) and a threshold $\theta_{T_{Non-safe}}$.
 
 If at this stage the trial is considered as non-safe we stop the trial. Otherwise we recruit more patients until the planned sample size is reached.
+
 
 ### Decision for phase-III
 
@@ -103,7 +120,7 @@ We assumed bivariate exponentially distributed time to event outcomes for advers
 | Exponential rate parameter for time to disease progression or death (experimental arm) | 1/47     |
 | Exponential rate parameter for adverse events (experimental arm) | 1/37      |
 
-for simulating data. Based on these parameters we get the proportion of disease progression or death at 24-months in the control arm,
+for simulating data. Based on these parameters we get the proportion of disease progression or death at 24-months in the control arm of
 
 ```{r}
 #| echo: true
@@ -112,10 +129,10 @@ for simulating data. Based on these parameters we get the proportion of disease 
 rate_event_0 <- 1/30
 
 # Proportion of patients with disease progression or death in control arm at 24-months 
-pexp(24, rate_event_0)
+paste0(round(pexp(24, rate_event_0)*100, 0), "%")
 ```
 
-and in the experimental arm,
+and in the experimental arm of
 ```{r}
 #| echo: true
 #| warning: false
@@ -123,10 +140,10 @@ and in the experimental arm,
 rate_event_1 <- 1/47
 
 # Proportion of patients with disease progression or death in experimental arm at 24-months 
-pexp(24, rate_event_1)
+paste0(round(pexp(24, rate_event_1)*100, 0), "%")
 ```
 
-and the proportion of adverse events at 6-months in the experimental arm
+and the proportion of adverse events at 6-months in the experimental arm of
 
 ```{r}
 #| echo: true
@@ -135,7 +152,114 @@ and the proportion of adverse events at 6-months in the experimental arm
 rate_tox_1 <- 1/47
 
 # Proportion of patients with disease progression or death in experimental arm at 6-months 
-pexp(6, rate_tox_1)
+paste0(round(pexp(6, rate_tox_1)*100, 0), "%")
+```
+
+
+#### Stopping boundaries phase-II
+
+We assumed the following parameters for the excess adverse event proportion stopping in the experimental arm:
+
+| Parameter                                                            | Value   |
+|----------------------------------------------------------------------|---------|
+| Excess threshold | 25%      |
+| Beta prior parameters | a=0.2, b=0.8     |
+| Initial interim sample size | n=30      |
+| Final sample size | n=70      |
+| $\theta_{T_{Non-safe}}$ | 60%      |
+| $\theta_{S}$ | 60%      |
+
+This gives us the following stopping boundaries based on the predictive probability:
+
+```{r}
+#| echo: true
+#| warning: false
+
+p_max <- c(0.25)
+
+# Prior information
+a_1 <- 0.2
+b_1 <- 0.8
+
+x <- seq(0,1,0.001)
+
+n_initial <- 30
+r <- 0:n_initial
+n_increase <- 40
+
+n_max <- 70
+n <- seq(n_initial, n_max, n_increase)
+r <- 0:n_max
+m <- n_max-r
+
+#### Scenario
+theta_T <- 0.6
+
+
+
+data <- expand.grid(n=n, r=r) %>% arrange(n) %>% 
+  filter(n>=r) %>% mutate(i=n_max-n+1)
+data <- expandRows(data, count=3)
+data <- data %>% group_by(n, r) %>% 
+  mutate(m=n_max-n, ind=1, i=cumsum(ind)-1, ind=NULL)
+
+data <- data %>% 
+  mutate(PS1=dbbinom(i, size=m, alpha=a_1+r, beta=b_1+n-r), 
+                        Ti=1-pbeta(p_max, a_1+r+i, b_1+n_max-r-i), 
+                        ind=ifelse(Ti>theta_T, 1, 0), n_max)
+
+data <- data %>% select(n_max, n, r, m, i, Ti, PS1, ind)
+
+threshold_safety <- 0.6
+
+data_pp <- data %>% group_by(n_max, n, r) %>% summarise(pp=round(sum(PS1*ind),6), 
+                                                 stop_pp=ifelse(pp>threshold_safety, 1, 0))
+
+
+stop_boundaries0 <- data_pp %>% filter(stop_pp==1) %>%
+  group_by(n_max, n) %>% summarise(r=min(r), stop=NULL)
+
+names(stop_boundaries0) <- c("Maximal sample size", "Interim sample size", "Stopping boundary")
+stop_boundaries0
+```
+
+### Priors
+
+We use the following priors for the simulation
+
+#### Beta prior for excess adverse event stopping
+
+As mentioned in the section of 'available evidence' there is some evidence for the adverse event proportion in the experimental arm. We assumed a slighty more conservative mean value of 0.2 with a prior weight of 1 patient from a beta prior with a=0.2 and b=0.8.
+
+#### Gaussian prior on hazard ratio for disease-free survival
+
+```{r}
+#| echo: true
+#| warning: false
+
+rate_event_0 <- 1/30
+rate_event_1 <- 1/47
+expected_event_rate <- 0.5*(pexp(24, rate_event_0)+pexp(24, rate_event_1))
+
+prior_mean <- log(0.8)
+prior_weight <- 120
+
+prior_sd <- 2/sqrt(prior_weight*expected_event_rate)
+```
+
+For the prior on the hazard ratio for disease-free survival we assumed a Gaussian distribution centered on a mean of $log(0.8)$ with a standard deviation of $`r round(prior_sd, 2)`$, which is based on the expected event rate with a prior weight of 120 patients. This leads to a probability that the prior log hazard ratio is greater than 0 of $`r round(1-pnorm(0, prior_mean, prior_sd),2)`$.
+
+```{r}
+#| echo: true
+#| warning: false
+
+x <- seq(-1.5, 1, 0.001)
+
+data_plot <- tibble(x=x, y=dnorm(x, prior_mean, prior_sd))
+# data_plot$x <- exp(data_plot$x)
+# data_plot$y <- exp(data_plot$y)
+
+ggplot(data_plot, aes(x, y))+geom_line()+theme_bw()+xlab("Log hazard ratio")+ylab("Density")+geom_vline(xintercept = 0, linetype="dashed")+theme(panel.grid.minor = element_blank())+ggtitle("Prior on hazard ratio")
 ```
 
 ## Author {-}
