@@ -1,7 +1,5 @@
 # Seamless phase-II/III study
 
-**THIS VIGNETTE IS STILL WORK IN PROGRESS**
-
 ```{r}
 #| echo: false
 #| warning: false
@@ -22,7 +20,7 @@ For the **experimental arm** we use information from another study with a simila
 
 For **adverse events outcomes** (defined by grade 3 CTCAE) in the experimental arm we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.
 
-No assumptions for the correlation between adverse events and disease-free survival were reported.
+No assumptions for the correlation between adverse events and disease-free survival were reported. In our used simulation approach we assumed correlations of 0.1, 0.5 and 0.9 between the adverse event outcome and the progression-free survival.
 
 ## Endpoints and testing hierarchy
 
@@ -30,14 +28,14 @@ No assumptions for the correlation between adverse events and disease-free survi
 
 **Primary endpoint**: Disease-free survival at 24-months (phase-III endpoint)
 
-We test the endpoints in a hierarchical way: Only if a pre-specified high probability for an excess adverse event proportion exists, the primary endpoint will be assessed for a continuation into a phase-III study.
+Of note, these are not co-primary endpoints, because the safety endpoint is not required to define a trial success. But we test the endpoints in a hierarchical way: Only if the probability for an excess adverse event proportion is below a given threshold, the primary endpoint will be assessed for futility assessment.
 
 ## Hypotheses
 
 We consider the following one-sided hypotheses for the phase-III trial
 
-- Null hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is greater or equal than zero, that is, $H_0: \theta \geq 0$
-- Alternative hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is smaller than zero, that is, $H_0: \theta<0$
+- Null hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is greater or equal than zero, that is, $H_0: \theta \geq 0$,
+- Alternative hypothesis: Log hazard ratio $\theta$ between experimental arm and control arm is smaller than zero, that is, $H_0: \theta<0$.
 
 ## Trial structure
 
@@ -47,11 +45,11 @@ gantt
     dateFormat X
     axisFormat %s
     section Phase-II
-    Interim phase-II: active, 0, 40
-    Phase-II: 0, 120
-    Evaluation for Phase-III: crit, 0, 120
+    Interim phase-II: active, 0, 50
+    Phase-II: 0, 100
+    Evaluation for Phase-III: crit, 0, 100
     section Phase-III
-    Phase-III: 0, 560
+    Phase-III: 0, 360
 ```  
 
 
@@ -69,7 +67,7 @@ We approximate the variance of $\theta$ with $4/m$, where $m$ is the number of e
 
 ### Phase-II part
 
-We plan the phase-II part with an an priori fixed sample size because of feasibility and resources discussed with clinicians. A safety interim analysis is planned
+We plan the phase-II part with an a priori fixed sample size of 100 patients. A safety interim analysis is planned after 25 patients are recruited in the experimental arm.
 
 ### Early stopping phase-II
 
@@ -94,21 +92,15 @@ The decision to continue seamlessly into a phase-III trial is based on two crite
 - 1) We stop the trial at the end of phase-II part if there is a high probability for excess adverse events (same as described above).
 - 2) If we have a low predictive probability for a successful phase-III trial at the end of phase-II.
 
-For the latter approach we use a Bayesian predictive 'interim monitoring' approach as described in @Spiegelhalter2003, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data $y_m$), the prior information and the assumed number of 'future' phase-III patients ($Y_n$) to calculate the predictive probability for a trial success that is we calculate
+For the latter approach we use a Bayesian predictive 'interim monitoring' approach as described in @Spiegelhalter2003, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data $y_m$), the prior information and the assumed number of 'future' phase-III patients ($Y_n$) to calculate the predictive probability of $P(\theta<0|y_m, Y_n)$. We stop the trial for futility if $P(\theta<0|y_m, Y_n)<\epsilon_{fut}$, which is
 
 $$
-P(\theta<0|y_m, Y_n)\geq 95\%,
+1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{1-\epsilon_{fut}} \right],
 $$
-which is
+where $z_{1-\epsilon_{fut}}$ is the upper $1-\epsilon_{fut}$%-quantile of a Gaussian distribution.
 
-$$
-1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{0.95} \right],
-$$
-where $z_{0.95}$ is the upper 95%-quantile of a Gaussian distribution. Because of the phase-II character we used a higher "one-sided" success probability of 95%. For the phase-III part we use a success probability of 97.5% as threshold.
+The trial at the end of phase-III is considered as successful if the posterior distribution of the log hazard ratio $P(\theta<0|\theta_0, y_m, Y)\geq 1-\epsilon_{success}$.
 
-#### Competing risk
-
-An adverse event is a competing event for progression or death. For the sample size calculation we 'replaced' patients with an adverse event with new phase-III patients. In the statistical analysis a competing event analysis is required.
 
 ### Simulation assumptions
 
@@ -155,6 +147,7 @@ rate_tox_1 <- 1/47
 paste0(round(pexp(6, rate_tox_1)*100, 0), "%")
 ```
 
+For the sample size calculation we assumed that for patients with an adverse event, 24-month progression-free survival information will be available and used for the sample size calculation.
 
 #### Stopping boundaries phase-II
 
@@ -164,8 +157,8 @@ We assumed the following parameters for the excess adverse event proportion stop
 |----------------------------------------------------------------------|---------|
 | Excess threshold | 25%      |
 | Beta prior parameters | a=0.2, b=0.8     |
-| Initial interim sample size | n=30      |
-| Final sample size | n=70      |
+| Initial interim sample size | n=25      |
+| Final sample size | n=50      |
 | $\theta_{T_{Non-safe}}$ | 60%      |
 | $\theta_{S}$ | 60%      |
 
@@ -183,11 +176,11 @@ b_1 <- 0.8
 
 x <- seq(0,1,0.001)
 
-n_initial <- 30
+n_initial <- 25
 r <- 0:n_initial
-n_increase <- 40
+n_increase <- 25
 
-n_max <- 70
+n_max <- 50
 n <- seq(n_initial, n_max, n_increase)
 r <- 0:n_max
 m <- n_max-r
@@ -242,12 +235,12 @@ rate_event_1 <- 1/47
 expected_event_rate <- 0.5*(pexp(24, rate_event_0)+pexp(24, rate_event_1))
 
 prior_mean <- log(0.8)
-prior_weight <- 120
+prior_weight <- 90
 
 prior_sd <- 2/sqrt(prior_weight*expected_event_rate)
 ```
 
-For the prior on the hazard ratio for disease-free survival we assumed a Gaussian distribution centered on a mean of $log(0.8)$ with a standard deviation of $`r round(prior_sd, 2)`$, which is based on the expected event rate with a prior weight of 120 patients. This leads to a probability that the prior log hazard ratio is greater than 0 of $`r round(1-pnorm(0, prior_mean, prior_sd),2)`$.
+For the prior on the hazard ratio for disease-free survival we assumed a Gaussian distribution centered on a mean of $log(0.8)$ with a standard deviation of $`r round(prior_sd, 2)`$, which is based on the expected event rate with a prior weight of $`r prior_weight`$ patients. This leads to a probability that the prior log hazard ratio is greater than 0 of $`r round(1-pnorm(0, prior_mean, prior_sd),2)`$.
 
 ```{r}
 #| echo: true
@@ -261,6 +254,32 @@ data_plot <- tibble(x=x, y=dnorm(x, prior_mean, prior_sd))
 
 ggplot(data_plot, aes(x, y))+geom_line()+theme_bw()+xlab("Log hazard ratio")+ylab("Density")+geom_vline(xintercept = 0, linetype="dashed")+theme(panel.grid.minor = element_blank())+ggtitle("Prior on hazard ratio")
 ```
+
+## Results
+
+We simulated 1,000 trials with the above specification parameters and report the following trial operating characteristics:
+
+| Parameter                                                            | Value  |
+|----------------------------------------------------------------------|---------|
+| Probability of stopping at interim analysis (phase-II) because of safety under null hypothesis |  5.8%  |
+| Probability of stopping (phase-II) because of safety under null hypothesis | 15.4%  |
+| Probability of starting a phase-III trial under null hypothesis | 43.1%  |
+| Probability of not-starting a phase-III trial because of futility under null hypothesis | 27.7%  |
+| Probability of successful phase-III trial under the null hypothesis |     3%  |
+| Probability of successful phase-III trial under the alternative hypothesis |  81%     |
+| $\epsilon_{fut}$ |  10%     |
+| $\epsilon_{success}$ |  2.5%     |
+
+
+## Comparison with frequentist phase-III trial
+
+We compare our seamless phase-II/III design simulation results with a sample size calculation from a 'classic' frequentist phase-III design with a one-sided logrank test ($\alpha=0.025$, $1-\beta=0.8$$ using the *artsurv* command in Stata:
+
+
+**artsurv**, method(l) edf0(0.45) hr(1,0.64) np(2) recrt(0 0, 1, 0 ) onesided(1) alpha(0.025) power(0.8)
+
+
+This command gives a calculated total sample size of 336 patients with an expected total number of events of 160 events.
 
 ## Author {-}
 

@@ -244,10 +244,7 @@ window.Quarto = {
   <li><a href="#gaussian-approximation" id="toc-gaussian-approximation" class="nav-link" data-scroll-target="#gaussian-approximation"><span class="header-section-number">3.5.1</span> Gaussian approximation</a></li>
   <li><a href="#phase-ii-part" id="toc-phase-ii-part" class="nav-link" data-scroll-target="#phase-ii-part"><span class="header-section-number">3.5.2</span> Phase-II part</a></li>
   <li><a href="#early-stopping-phase-ii" id="toc-early-stopping-phase-ii" class="nav-link" data-scroll-target="#early-stopping-phase-ii"><span class="header-section-number">3.5.3</span> Early stopping phase-II</a></li>
-  <li><a href="#decision-for-phase-iii" id="toc-decision-for-phase-iii" class="nav-link" data-scroll-target="#decision-for-phase-iii"><span class="header-section-number">3.5.4</span> Decision for phase-III</a>
-  <ul class="collapse">
-  <li><a href="#competing-risk" id="toc-competing-risk" class="nav-link" data-scroll-target="#competing-risk"><span class="header-section-number">3.5.4.1</span> Competing risk</a></li>
-  </ul></li>
+  <li><a href="#decision-for-phase-iii" id="toc-decision-for-phase-iii" class="nav-link" data-scroll-target="#decision-for-phase-iii"><span class="header-section-number">3.5.4</span> Decision for phase-III</a></li>
   <li><a href="#simulation-assumptions" id="toc-simulation-assumptions" class="nav-link" data-scroll-target="#simulation-assumptions"><span class="header-section-number">3.5.5</span> Simulation assumptions</a>
   <ul class="collapse">
   <li><a href="#stopping-boundaries-phase-ii" id="toc-stopping-boundaries-phase-ii" class="nav-link" data-scroll-target="#stopping-boundaries-phase-ii"><span class="header-section-number">3.5.5.1</span> Stopping boundaries phase-II</a></li>
@@ -258,6 +255,8 @@ window.Quarto = {
   <li><a href="#gaussian-prior-on-hazard-ratio-for-disease-free-survival" id="toc-gaussian-prior-on-hazard-ratio-for-disease-free-survival" class="nav-link" data-scroll-target="#gaussian-prior-on-hazard-ratio-for-disease-free-survival"><span class="header-section-number">3.5.6.2</span> Gaussian prior on hazard ratio for disease-free survival</a></li>
   </ul></li>
   </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">3.6</span> Results</a></li>
+  <li><a href="#comparison-with-frequentist-phase-iii-trial" id="toc-comparison-with-frequentist-phase-iii-trial" class="nav-link" data-scroll-target="#comparison-with-frequentist-phase-iii-trial"><span class="header-section-number">3.7</span> Comparison with frequentist phase-III trial</a></li>
   <li><a href="#author" id="toc-author" class="nav-link" data-scroll-target="#author">Author</a></li>
   </ul>
 </nav>
@@ -273,27 +272,26 @@ window.Quarto = {
 
 
 
-<p><strong>THIS VIGNETTE IS STILL WORK IN PROGRESS</strong></p>
 <p>This vignette was motivated by a consulting of CTU Bern (C2597). It is an example of a Bayesian seamless phase-II/III design with a correlated adverse event endpoint and a time-to-event primary endpoint.</p>
 <section id="available-evidence" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="available-evidence"><span class="header-section-number">3.1</span> Available evidence</h2>
 <p>For the <strong>control arm</strong> we used information from a published randomized controlled trial. The authors reported from approximately 350 total randomized patients to a control arm a disease-free survival percentage of approximately 50% at 24-months. For our sample size calculation we assumed a slightly more conservative percentage of 45%.</p>
 <p>For the <strong>experimental arm</strong> we use information from another study with a similar intervention which reported an approximate 70% progression-free survival at 24 months. We assumed a more conservative 60% progression-free survival at 24-months in the experimental arm.</p>
 <p>For <strong>adverse events outcomes</strong> (defined by grade 3 CTCAE) in the experimental arm we used the reported number of a review from 20 (4 prospective studies and 16 retrospective studies). For the prospective studies the authors reported a weighted average of 13.9% adverse events, whereas for the retrospective studies a value of 10.4%. We used a slightly more conservative value of 15% for the sample size calculation.</p>
-<p>No assumptions for the correlation between adverse events and disease-free survival were reported.</p>
+<p>No assumptions for the correlation between adverse events and disease-free survival were reported. In our used simulation approach we assumed correlations of 0.1, 0.5 and 0.9 between the adverse event outcome and the progression-free survival.</p>
 </section>
 <section id="endpoints-and-testing-hierarchy" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="endpoints-and-testing-hierarchy"><span class="header-section-number">3.2</span> Endpoints and testing hierarchy</h2>
 <p><strong>Safety endpoint</strong>: Adverse events in experimental arm (for phase-II part)</p>
 <p><strong>Primary endpoint</strong>: Disease-free survival at 24-months (phase-III endpoint)</p>
-<p>We test the endpoints in a hierarchical way: Only if a pre-specified high probability for an excess adverse event proportion exists, the primary endpoint will be assessed for a continuation into a phase-III study.</p>
+<p>Of note, these are not co-primary endpoints, because the safety endpoint is not required to define a trial success. But we test the endpoints in a hierarchical way: Only if the probability for an excess adverse event proportion is below a given threshold, the primary endpoint will be assessed for futility assessment.</p>
 </section>
 <section id="hypotheses" class="level2" data-number="3.3">
 <h2 data-number="3.3" class="anchored" data-anchor-id="hypotheses"><span class="header-section-number">3.3</span> Hypotheses</h2>
 <p>We consider the following one-sided hypotheses for the phase-III trial</p>
 <ul>
-<li>Null hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is greater or equal than zero, that is, <span class="math inline">\(H_0: \theta \geq 0\)</span></li>
-<li>Alternative hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is smaller than zero, that is, <span class="math inline">\(H_0: \theta&lt;0\)</span></li>
+<li>Null hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is greater or equal than zero, that is, <span class="math inline">\(H_0: \theta \geq 0\)</span>,</li>
+<li>Alternative hypothesis: Log hazard ratio <span class="math inline">\(\theta\)</span> between experimental arm and control arm is smaller than zero, that is, <span class="math inline">\(H_0: \theta&lt;0\)</span>.</li>
 </ul>
 </section>
 <section id="trial-structure" class="level2" data-number="3.4">
@@ -308,11 +306,11 @@ window.Quarto = {
     dateFormat X
     axisFormat %s
     section Phase-II
-    Interim phase-II: active, 0, 40
-    Phase-II: 0, 120
-    Evaluation for Phase-III: crit, 0, 120
+    Interim phase-II: active, 0, 50
+    Phase-II: 0, 100
+    Evaluation for Phase-III: crit, 0, 100
     section Phase-III
-    Phase-III: 0, 560
+    Phase-III: 0, 360
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -331,7 +329,7 @@ window.Quarto = {
 </section>
 <section id="phase-ii-part" class="level3" data-number="3.5.2">
 <h3 data-number="3.5.2" class="anchored" data-anchor-id="phase-ii-part"><span class="header-section-number">3.5.2</span> Phase-II part</h3>
-<p>We plan the phase-II part with an an priori fixed sample size because of feasibility and resources discussed with clinicians. A safety interim analysis is planned</p>
+<p>We plan the phase-II part with an a priori fixed sample size of 100 patients. A safety interim analysis is planned after 25 patients are recruited in the experimental arm.</p>
 </section>
 <section id="early-stopping-phase-ii" class="level3" data-number="3.5.3">
 <h3 data-number="3.5.3" class="anchored" data-anchor-id="early-stopping-phase-ii"><span class="header-section-number">3.5.3</span> Early stopping phase-II</h3>
@@ -355,17 +353,11 @@ PP&amp;=E\left[I\left\{ P\left(p_1&gt;p_{max}|r_{1}, n_{1}, s_{1}\right)&gt;\the
 <li>If we have a low predictive probability for a successful phase-III trial at the end of phase-II.</li>
 </ol></li>
 </ul>
-<p>For the latter approach we use a Bayesian predictive ‘interim monitoring’ approach as described in <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data <span class="math inline">\(y_m\)</span>), the prior information and the assumed number of ‘future’ phase-III patients (<span class="math inline">\(Y_n\)</span>) to calculate the predictive probability for a trial success that is we calculate</p>
+<p>For the latter approach we use a Bayesian predictive ‘interim monitoring’ approach as described in <span class="citation" data-cites="Spiegelhalter2003">[<a href="references.html#ref-Spiegelhalter2003" role="doc-biblioref">1</a>]</span>, chapter 6.6.3. In brief, we use the observed data at the end of phase-II (interim data <span class="math inline">\(y_m\)</span>), the prior information and the assumed number of ‘future’ phase-III patients (<span class="math inline">\(Y_n\)</span>) to calculate the predictive probability of <span class="math inline">\(P(\theta&lt;0|y_m, Y_n)\)</span>. We stop the trial for futility if <span class="math inline">\(P(\theta&lt;0|y_m, Y_n)&lt;\epsilon_{fut}\)</span>, which is</p>
 <p><span class="math display">\[
-P(\theta&lt;0|y_m, Y_n)\geq 95\%,
-\]</span> which is</p>
-<p><span class="math display">\[
-1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{0.95} \right],
-\]</span> where <span class="math inline">\(z_{0.95}\)</span> is the upper 95%-quantile of a Gaussian distribution. Because of the phase-II character we used a higher “one-sided” success probability of 95%. For the phase-III part we use a success probability of 97.5% as threshold.</p>
-<section id="competing-risk" class="level4" data-number="3.5.4.1">
-<h4 data-number="3.5.4.1" class="anchored" data-anchor-id="competing-risk"><span class="header-section-number">3.5.4.1</span> Competing risk</h4>
-<p>An adverse event is a competing event for progression or death. For the sample size calculation we ‘replaced’ patients with an adverse event with new phase-III patients. In the statistical analysis a competing event analysis is required.</p>
-</section>
+1-\Phi\left[ \frac{\sqrt{m_{phase3}}\theta_{phase3}}{2}+\frac{m_{phase2}\theta_{phase2}}{2\sqrt{m_{phase3}}}+\frac{m_{prior}\theta_{prior}}{2\sqrt{m_{phase3}}}+\sqrt{\frac{m_{prior}+m_{phase2}+m_{phase3}}{m_{phase3}}}\cdot z_{1-\epsilon_{fut}} \right],
+\]</span> where <span class="math inline">\(z_{1-\epsilon_{fut}}\)</span> is the upper <span class="math inline">\(1-\epsilon_{fut}\)</span>%-quantile of a Gaussian distribution.</p>
+<p>The trial at the end of phase-III is considered as successful if the posterior distribution of the log hazard ratio <span class="math inline">\(P(\theta&lt;0|\theta_0, y_m, Y)\geq 1-\epsilon_{success}\)</span>.</p>
 </section>
 <section id="simulation-assumptions" class="level3" data-number="3.5.5">
 <h3 data-number="3.5.5" class="anchored" data-anchor-id="simulation-assumptions"><span class="header-section-number">3.5.5</span> Simulation assumptions</h3>
@@ -435,6 +427,7 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 <pre><code>[1] "12%"</code></pre>
 </div>
 </div>
+<p>For the sample size calculation we assumed that for patients with an adverse event, 24-month progression-free survival information will be available and used for the sample size calculation.</p>
 <section id="stopping-boundaries-phase-ii" class="level4" data-number="3.5.5.1">
 <h4 data-number="3.5.5.1" class="anchored" data-anchor-id="stopping-boundaries-phase-ii"><span class="header-section-number">3.5.5.1</span> Stopping boundaries phase-II</h4>
 <p>We assumed the following parameters for the excess adverse event proportion stopping in the experimental arm:</p>
@@ -460,11 +453,11 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 </tr>
 <tr class="odd">
 <td>Initial interim sample size</td>
-<td>n=30</td>
+<td>n=25</td>
 </tr>
 <tr class="even">
 <td>Final sample size</td>
-<td>n=70</td>
+<td>n=50</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\theta_{T_{Non-safe}}\)</span></td>
@@ -488,11 +481,11 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fl">0.001</span>)</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>n_initial <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>n_initial <span class="ot">&lt;-</span> <span class="dv">25</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n_initial</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>n_increase <span class="ot">&lt;-</span> <span class="dv">40</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>n_increase <span class="ot">&lt;-</span> <span class="dv">25</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>n_max <span class="ot">&lt;-</span> <span class="dv">70</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>n_max <span class="ot">&lt;-</span> <span class="dv">50</span></span>
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">seq</span>(n_initial, n_max, n_increase)</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">:</span>n_max</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> n_max<span class="sc">-</span>r</span>
@@ -532,8 +525,8 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 # Groups:   Maximal sample size [1]
   `Maximal sample size` `Interim sample size` `Stopping boundary`
                   &lt;dbl&gt;                 &lt;dbl&gt;               &lt;int&gt;
-1                    70                    30                   9
-2                    70                    70                  19</code></pre>
+1                    50                    25                   8
+2                    50                    50                  14</code></pre>
 </div>
 </div>
 </section>
@@ -555,12 +548,12 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>expected_event_rate <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span>(<span class="fu">pexp</span>(<span class="dv">24</span>, rate_event_0)<span class="sc">+</span><span class="fu">pexp</span>(<span class="dv">24</span>, rate_event_1))</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>prior_mean <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fl">0.8</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>prior_weight <span class="ot">&lt;-</span> <span class="dv">120</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>prior_weight <span class="ot">&lt;-</span> <span class="dv">90</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>prior_sd <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">/</span><span class="fu">sqrt</span>(prior_weight<span class="sc">*</span>expected_event_rate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>For the prior on the hazard ratio for disease-free survival we assumed a Gaussian distribution centered on a mean of <span class="math inline">\(log(0.8)\)</span> with a standard deviation of <span class="math inline">\(0.26\)</span>, which is based on the expected event rate with a prior weight of 120 patients. This leads to a probability that the prior log hazard ratio is greater than 0 of <span class="math inline">\(0.2\)</span>.</p>
+<p>For the prior on the hazard ratio for disease-free survival we assumed a Gaussian distribution centered on a mean of <span class="math inline">\(log(0.8)\)</span> with a standard deviation of <span class="math inline">\(0.31\)</span>, which is based on the expected event rate with a prior weight of <span class="math inline">\(90\)</span> patients. This leads to a probability that the prior log hazard ratio is greater than 0 of <span class="math inline">\(0.23\)</span>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Show R code</summary>
@@ -582,6 +575,62 @@ P(\theta&lt;0|y_m, Y_n)\geq 95\%,
 </div>
 </section>
 </section>
+</section>
+<section id="results" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="results"><span class="header-section-number">3.6</span> Results</h2>
+<p>We simulated 1,000 trials with the above specification parameters and report the following trial operating characteristics:</p>
+<table class="table">
+<colgroup>
+<col style="width: 88%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Probability of stopping at interim analysis (phase-II) because of safety under null hypothesis</td>
+<td>5.8%</td>
+</tr>
+<tr class="even">
+<td>Probability of stopping (phase-II) because of safety under null hypothesis</td>
+<td>15.4%</td>
+</tr>
+<tr class="odd">
+<td>Probability of starting a phase-III trial under null hypothesis</td>
+<td>43.1%</td>
+</tr>
+<tr class="even">
+<td>Probability of not-starting a phase-III trial because of futility under null hypothesis</td>
+<td>27.7%</td>
+</tr>
+<tr class="odd">
+<td>Probability of successful phase-III trial under the null hypothesis</td>
+<td>3%</td>
+</tr>
+<tr class="even">
+<td>Probability of successful phase-III trial under the alternative hypothesis</td>
+<td>81%</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\epsilon_{fut}\)</span></td>
+<td>10%</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\epsilon_{success}\)</span></td>
+<td>2.5%</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="comparison-with-frequentist-phase-iii-trial" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="comparison-with-frequentist-phase-iii-trial"><span class="header-section-number">3.7</span> Comparison with frequentist phase-III trial</h2>
+<p>We compare our seamless phase-II/III design simulation results with a sample size calculation from a ‘classic’ frequentist phase-III design with a one-sided logrank test (<span class="math inline">\(\alpha=0.025\)</span>, <span class="math inline">\(1-\beta=0.8\)</span>$ using the <em>artsurv</em> command in Stata:</p>
+<p><strong>artsurv</strong>, method(l) edf0(0.45) hr(1,0.64) np(2) recrt(0 0, 1, 0 ) onesided(1) alpha(0.025) power(0.8)</p>
+<p>This command gives a calculated total sample size of 336 patients with an expected total number of events of 160 events.</p>
 </section>
 <section id="author" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="author">Author</h2>
