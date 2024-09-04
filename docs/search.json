@@ -479,7 +479,7 @@
     "href": "01-SampleSize-Seamless.html#comparison-with-frequentist-phase-iii-trial",
     "title": "3  Seamless phase-II/III study",
     "section": "3.7 Comparison with frequentist phase-III trial",
-    "text": "3.7 Comparison with frequentist phase-III trial\nWe compare our seamless phase-II/III design simulation results with a sample size calculation from a ‘classic’ frequentist phase-III design with a one-sided logrank test (\\(\\alpha=0.025\\), \\(1-\\beta=0.8\\)$ using the artsurv command in Stata:\nartsurv, method(l) edf0(0.45) hr(1,0.64) np(2) recrt(0 0, 1, 0 ) onesided(1) alpha(0.025) power(0.8)\nThis command gives a calculated total sample size of 336 patients with an expected total number of events of 160 events.",
+    "text": "3.7 Comparison with frequentist phase-III trial\nWe compare our seamless phase-II/III design simulation results with a sample size calculation from a ‘classic’ frequentist phase-III design with a one-sided logrank test (\\(\\alpha=0.025\\), \\(1-\\beta=0.8\\)) using the artsurv command in Stata:\nartsurv, method(l) edf0(0.45) hr(1,0.64) np(2) recrt(0 0, 1, 0 ) onesided(1) alpha(0.025) power(0.8)\nThis command gives a calculated total sample size of 336 patients with an expected total number of events of 160 events.",
     "crumbs": [
       "Sample size",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Seamless phase-II/III study</span>"

@@ -273,7 +273,7 @@ We simulated 1,000 trials with the above specification parameters and report the
 
 ## Comparison with frequentist phase-III trial
 
-We compare our seamless phase-II/III design simulation results with a sample size calculation from a 'classic' frequentist phase-III design with a one-sided logrank test ($\alpha=0.025$, $1-\beta=0.8$$ using the *artsurv* command in Stata:
+We compare our seamless phase-II/III design simulation results with a sample size calculation from a 'classic' frequentist phase-III design with a one-sided logrank test ($\alpha=0.025$, $1-\beta=0.8$) using the *artsurv* command in Stata:
 
 
 **artsurv**, method(l) edf0(0.45) hr(1,0.64) np(2) recrt(0 0, 1, 0 ) onesided(1) alpha(0.025) power(0.8)
