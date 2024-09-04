@@ -1,4 +1,4 @@
-# Two-arm study with a binary primary outcome
+# Two-arm study with a binary primary outcome for assessing threshold stopping
 
 ```{r}
 #| echo: false
