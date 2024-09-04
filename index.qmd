@@ -1,3 +1,7 @@
 # Introduction
 
-This is the Bayesian Toolbox from the Department of Clinical Research (DCR) of the University of Bern: A collection of resources and examples from consultings/projets of the DCR statistics group using Bayesian trial designs.
+This is the Bayesian Toolbox from the Department of Clinical Research (DCR) of the University of Bern: A collection of resources and examples from consultings/projets of the DCR statistics group using Bayesian trial designs. This toolbox aims to support
+
+- Future consultings/projects with a foundation
+- Clinicians, statisticians and patients with examples of trial designs
+- Communication between clinicians, statisticians and patients
