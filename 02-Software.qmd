@@ -16,17 +16,17 @@ INLA interfaces with R but is not on CRAN. It can be manually installed as descr
 
 ### JAGS
 
-JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BUGS language. JAGS interfaces with R using the package *rjags*.
+JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BUGS language. JAGS interfaces with R using the package **rjags**.
 
-### STAN
+### Stan
 
 "Stan is a state-of-the-art platform for statistical modeling and high-performance statistical computation." ([https://mc-stan.org/](https://mc-stan.org/)) It uses a probabilistic programming language using MCMC sampling, approximate Bayesian inference and penalized maximum likelihood estimation.
 
-STAN interfaces with R using the package *rstan*. Regression approaches are implemented in *rstanarm* and *brms*.
+STAN interfaces with R using the package **rstan**. Regression approaches are implemented in **rstanarm** and **brms**.
 
 ## SCTO validation
 
-All above mentioned packages can be validated within the SCTO validation platform [https://swissclinicaltrialorganisation.github.io/validation_platform/](https://swissclinicaltrialorganisation.github.io/validation_platform/).
+All above mentioned packages can be validated according to the guidelines of the SCTO validation platform ([https://swissclinicaltrialorganisation.github.io/validation_platform/](https://swissclinicaltrialorganisation.github.io/validation_platform/)).
 
 ## Author {-}
 
