@@ -6,15 +6,27 @@ Bayesian analysis faces non-trivial mathematical problems, for example, solution
 
 ### BUGS
 
+BUGS is "Bayesian Inference Using Gibbs Sampling". BUGS used a Gibbs Sampler or the Metropolis-Hastings algorithm for the simulation of posterior distributions and was likely the first accessible approach to Bayesian simulations for researchers. While WinBUGS was used in Windows systems, OpenBUGS was for Linux systems. BUGS is neither further developed nor maintained anymore.
 
+### INLA
 
-### STAN
+INLA is "Integrated Nested Laplace Approximation" ([https://www.r-inla.org/](https://www.r-inla.org/)). INLA uses latent Gaussian models for approximate Bayesian inference. INLA is an alternative to MCMC. Because of it's approximation approach it is much faster than MCMC. 
 
-(https://mc-stan.org/)
+INLA interfaces with R but is not on CRAN. It can be manually installed as described on [https://www.r-inla.org/](https://www.r-inla.org/).
 
 ### JAGS
 
-JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BUGS language.
+JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BUGS language. JAGS interfaces with R using the package *rjags*.
+
+### STAN
+
+"Stan is a state-of-the-art platform for statistical modeling and high-performance statistical computation." ([https://mc-stan.org/](https://mc-stan.org/)) It uses a probabilistic programming language using MCMC sampling, approximate Bayesian inference and penalized maximum likelihood estimation.
+
+STAN interfaces with R using the package *rstan*. Regression approaches are implemented in *rstanarm* and *brms*.
+
+## SCTO validation
+
+All above mentioned packages can be validated within the SCTO validation platform [https://swissclinicaltrialorganisation.github.io/validation_platform/](https://swissclinicaltrialorganisation.github.io/validation_platform/).
 
 ## Author {-}
 
