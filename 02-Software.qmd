@@ -1,0 +1,20 @@
+# Software and packages
+
+Bayesian analysis faces non-trivial mathematical problems, for example, solution of integrals for posterior summaries. Likely, the most popular and convenient way to approximate complex integrals is to use Markov Chain Monte Carlo (MCMC) algorithms. The Bayesian Inference Using Gibbs Sampling (BUGS) software introduced in 1989 was probably one of the first software for that purpose. Since then, other software and approaches emerged allowing an accessible (for example, as R package) and user-friendly (for example, using specific syntax) for researchers. In this section we provide an overview of available statistical software for Bayesian analysis.
+
+## Available software
+
+### STAN
+
+(https://mc-stan.org/)
+
+### JAGS
+
+JAGS is "Just Another Gibbs Sampler".
+
+## Author {-}
+
+André Moser, Senior Statistician\
+Department of Clinical Research\
+University of Bern\
+3012 Bern, Switzerland

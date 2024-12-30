@@ -1,0 +1,3 @@
+# Methods
+
+This section covers specific methodological aspects of applied Bayesian analysis, include software and packages, and analysis examples.

@@ -17,6 +17,9 @@ book:
         - 01-SampleSize-ContinuousOutcome.qmd
         - 01-SampleSize-Seamless.qmd
         - 01-SampleSize_Bayesian_power_basics_examples.qmd
+    - part: 02-Methods.qmd
+      chapters:	
+        - 02-Software.qmd
     - references.qmd
 
 format:

@@ -54,7 +54,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "1. Lee\nJJ, Liu DD. A predictive probability design for phase II cancer clinical\ntrials. Clinical Trials. 2008;5: 93–106. doi:10.1177/1740774508089279\n\n\n2. Sambucini V. Efficacy and toxicity monitoring\nvia bayesian predictive probabilities in phase II clinical trials.\nStatistical Methods & Applications. 2021;30: 637–663. doi:10.1007/s10260-020-00537-3",
+    "text": "1. Spiegelhalter DJ, Abrams KR, Myles JP. Bayesian\napproaches to clinical trials and health‐care evaluation. Wiley; 2003.\ndoi:10.1002/0470092602\n\n\n2. Lee\nJJ, Liu DD. A predictive probability design for phase II cancer clinical\ntrials. Clinical Trials. 2008;5: 93–106. doi:10.1177/1740774508089279\n\n\n3. Sambucini V. Efficacy and toxicity monitoring\nvia bayesian predictive probabilities in phase II clinical trials.\nStatistical Methods & Applications. 2021;30: 637–663. doi:10.1007/s10260-020-00537-3",
     "crumbs": [
       "References"
     ]
@@ -483,6 +483,104 @@
     "crumbs": [
       "Sample size and power",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Seamless phase-II/III study</span>"
+    ]
+  },
+  {
+    "objectID": "02-Software.html",
+    "href": "02-Software.html",
+    "title": "5  Software and packages",
+    "section": "",
+    "text": "5.1 Available software",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Software and packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-Software.html#requirments-for-dcr",
+    "href": "02-Software.html#requirments-for-dcr",
+    "title": "5  Software and packages",
+    "section": "",
+    "text": "Active development: For example, BUGS receives no future update or support anymore, whereas STAN is an ongoing, active project with support.",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Software and packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-Software.html#author",
+    "href": "02-Software.html#author",
+    "title": "5  Software and packages",
+    "section": "Author",
+    "text": "Author\nAndré Moser, Senior Statistician\nDepartment of Clinical Research\nUniversity of Bern\n3012 Bern, Switzerland",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Software and packages</span>"
+    ]
+  },
+  {
+    "objectID": "02-MethodsAnalysis.html",
+    "href": "02-MethodsAnalysis.html",
+    "title": "6  Two-arm study with a binary primary outcome for assessing threshold stopping",
+    "section": "",
+    "text": "6.1 Methods",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-arm study with a binary primary outcome for assessing threshold stopping</span>"
+    ]
+  },
+  {
+    "objectID": "02-MethodsAnalysis.html#methods",
+    "href": "02-MethodsAnalysis.html#methods",
+    "title": "6  Two-arm study with a binary primary outcome for assessing threshold stopping",
+    "section": "",
+    "text": "6.1.1 Sample size\nThe sample size was fixed to \\(N_{max}=36\\) patients (24 patients in the experimental arm, 12 patients in the control arm) because of feasibility.\n\n\n6.1.2 Study design\nThe following figure summarises the trial design. Suppose we randomise patients with a 2:1 allocation ratio to the experimental arm and the control arm. Let \\(p_i\\) be the TD proportion coming from a design prior \\(\\pi^d_i \\sim Beta(a^d_i,b^d_i)\\), \\(p_i\\), \\(i=0,1\\). The design prior represents the uncertainty of \\(p_i\\) at the design stage and might be different from the analysis prior. One interim analysis will be performed after the recruitment of \\(N^{I}=n_{0}+n_{1}=18\\) patients (\\(n_{0}\\) denotes the number of patients in the control arm and \\(n_{1}\\) denotes the number of patients in the experimental arm; The index \\(I\\) stands for ‘interim’) which corresponds to 50% of the fixed sample size.\n\n\n\n\n\nflowchart TD\n  A[2:1 randomisation] --&gt; B[Experimental group with TD proportion \\np1 coming from design prior]\n  A --&gt; C[Control group with TD proportion \\np0 coming from design prior]\n  B ~~~ D[Interim analysis\\n\\nStop early:\\nIf experimental group has a high predictive probability of excessive discontinuation\\notherwise randomise new patients until N_max is reached]\n  C ~~~ D\n  style A fill:white,color:black\n  style B fill:white,color:black\n  style C fill:white,color:black\n  style D fill:white,color:black,stroke-dasharray: 5 5\n\n\n\n\n\n\n\n\n6.1.3 Stopping criterium\nThe excessive threshold for stopping the trial was set to \\(p_{max}=0.2\\). This number was based on the design prior choice (see subsection ‘Design prior choice’). In brief, based on a discussion with clinical experts and available evidence the assumed mean average TD proportion was set to \\(0.1\\). A doubling of this number led to \\(p_{max}=0.2\\).\n\n\n6.1.4 Statistical methods\nSuppose that at the interim analysis in the experimental arm \\(r_{1}\\) discontinuation events are observed. If we assume that \\(N_{max}=n_{max, 0}+n_{max, 1}\\) is the planned sample size of the trial, then a remaining future \\(m_{1}=n_{max, 1}-n_{1}\\) will be recruited in the experimental arm with possible future events \\(S_1\\in\\{0,\\cdots, m_1\\}\\). Note that at each interim analysis the posterior distribution is Beta-distributed \\(p_i|r_i,n_i \\sim Beta(a_i+r_i, b_i+n_i-r_i)\\) and \\(S_1|r_1,n_1\\) is Beta-binomial distributed \\(S_1 \\sim Betabinomal(m_1, a+r_1, b+n_1-r_1)\\).\nThe trial is stopped early if \\(PP&gt;\\theta_{S}\\), for an upper discontinuation proportion threshold \\(p_{max}\\), \\[\n\\begin{aligned}\nPP&=E\\left[I\\left\\{ P\\left(p_1&gt;p_{max}|r_{1}, n_{1}, s_{1}\\right)&gt;\\theta_{T_{Non-safe}}\\right\\}|r_{1}, n_{1}\\right] \\\\\n&=\\sum_{s_1=0}^{m_1} I(P(p_1 &gt; p_{max}|r_{1},n_1,s_1)&gt;\\theta_{T_{Non-safe}}) P(S_{1}=s_1|r_{1}, n_1).\n\\end{aligned}\n\\] That is, we stop the trial early if there is a high predictive probability \\(\\Theta_S\\) that the discontinuation proportion in the experimental arm exceeds a upper threshold \\(p_{max}\\) given interim data and future events, otherwise the remaining 18 patients are randomised until the fixed sample size is reached.\nStopping boundaries are calculated for each combination of \\(r_1\\) (and thus \\(m_1\\)) given the maximal sample size \\(N_{max}\\) and the interim sample size \\(N^I\\). The tibble below shows the example of \\(r_1=2\\) and \\(n_1=12\\) for the skeptical prior. We set \\(\\theta_{T_{Non-safe}}=0.6\\).\n\n\nShow R code\np_max &lt;- c(0.2)\n\n# Prior information\nprior_type &lt;- \"Skeptical\"\na_1 &lt;- 2.4\nb_1 &lt;- 9.6\n\nx &lt;- seq(0,1,0.001)\n\nn_initial &lt;- 12\nr &lt;- 0:n_initial\nn_increase &lt;- 12\n\nn_max &lt;- 24\nn &lt;- seq(n_initial, n_max, n_increase)\nr &lt;- 0:n_max\nm &lt;- n_max-r\n\n#### Scenario\ntheta_T &lt;- 0.6\n\n\n\ndata &lt;- expand.grid(n=n, r=r) %&gt;% arrange(n) %&gt;% \n  filter(n&gt;=r) %&gt;% mutate(i=n_max-n+1)\ndata &lt;- expandRows(data, count=3)\ndata &lt;- data %&gt;% group_by(n, r) %&gt;% \n  mutate(m=n_max-n, ind=1, i=cumsum(ind)-1, ind=NULL)\n\ndata &lt;- data %&gt;% \n  mutate(PS1=dbbinom(i, size=m, alpha=a_1+r, beta=b_1+n-r), \n                        Ti=1-pbeta(p_max, a_1+r+i, b_1+n_max-r-i), \n                        ind=ifelse(Ti&gt;theta_T, 1, 0), n_max)\n\ndata &lt;- data %&gt;% select(n_max, n, r, m, i, Ti, PS1, ind)\ndata %&gt;% filter(n==12, r==2)\n\n\n# A tibble: 13 × 8\n# Groups:   n, r [1]\n   n_max     n     r     m     i     Ti         PS1   ind\n   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;\n 1    24    12     2    12     0 0.0881 0.139           0\n 2    24    12     2    12     1 0.190  0.241           0\n 3    24    12     2    12     2 0.334  0.241           0\n 4    24    12     2    12     3 0.500  0.180           0\n 5    24    12     2    12     4 0.661  0.109           1\n 6    24    12     2    12     5 0.793  0.0549          1\n 7    24    12     2    12     6 0.887  0.0235          1\n 8    24    12     2    12     7 0.945  0.00852         1\n 9    24    12     2    12     8 0.976  0.00257         1\n10    24    12     2    12     9 0.990  0.000627        1\n11    24    12     2    12    10 0.997  0.000117        1\n12    24    12     2    12    11 0.999  0.0000148       1\n13    24    12     2    12    12 1.00   0.000000971     1\n\n\nThe predictive probabilities for each \\(r_1\\) are (with \\(\\theta_{S}=0.8\\)):\n\n\nShow R code\n## Early stopping using predictive distribution\n\nthreshold_safety &lt;- 0.8\n\ndata_pp &lt;- data %&gt;% group_by(n_max, n, r) %&gt;% summarise(pp=round(sum(PS1*ind),6), \n                                                 stop_pp=ifelse(pp&gt;threshold_safety, 1, 0))\ndata_pp %&gt;% filter(n==12)\n\n\n# A tibble: 13 × 5\n# Groups:   n_max, n [1]\n   n_max     n     r      pp stop_pp\n   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;\n 1    24    12     0 0.00552       0\n 2    24    12     1 0.0459        0\n 3    24    12     2 0.199         0\n 4    24    12     3 0.502         0\n 5    24    12     4 0.814         1\n 6    24    12     5 0.971         1\n 7    24    12     6 1             1\n 8    24    12     7 1             1\n 9    24    12     8 1             1\n10    24    12     9 1             1\n11    24    12    10 1             1\n12    24    12    11 1             1\n13    24    12    12 1             1\n\n\nThe same calculation holds for the neutral prior and we get the following stopping boundaries\n\n\nShow R code\nstop_boundaries0 &lt;- data_pp %&gt;% filter(stop_pp==1) %&gt;%\n  group_by(n_max, n) %&gt;% summarise(r=min(r), stop=NULL)\nstop_boundaries0$p_max &lt;- p_max\nstop_boundaries0$theta_T &lt;- theta_T\nstop_boundaries0$threshold_safety &lt;- threshold_safety\nstop_boundaries0$prior_type &lt;- prior_type\nstop_boundaries &lt;- stop_boundaries0\n\n# Prior information\nprior_type &lt;- \"Neutral\"\na_1 &lt;- 0.6\nb_1 &lt;- 5.4\n\nx &lt;- seq(0,1,0.001)\n\nn_initial &lt;- 12\nr &lt;- 0:n_initial\nn_increase &lt;- 12\n\nn_max &lt;- 24\nn &lt;- seq(n_initial, n_max, n_increase)\nr &lt;- 0:n_max\nm &lt;- n_max-r\n\n#### Scenario\ntheta_T &lt;- 0.6\nthreshold_safety &lt;- 0.8\n\n\ndata &lt;- expand.grid(n=n, r=r) %&gt;% arrange(n) %&gt;% filter(n&gt;=r) %&gt;% mutate(i=n_max-n+1)\ndata &lt;- expandRows(data, count=3)\ndata &lt;- data %&gt;% group_by(n, r) %&gt;% mutate(m=n_max-n, ind=1, i=cumsum(ind)-1, ind=NULL)\n\ndata &lt;- data %&gt;% mutate(cond_postprob=dbbinom(i, size=m, alpha=a_1+r, beta=b_1+n-r), \n                        Ti=1-pbeta(p_max, a_1+r+i, b_1+n_max-r-i), \n                        ind=ifelse(Ti&gt;theta_T, 1, 0), n_max)\n\ndata &lt;- data %&gt;% select(n_max, n, r, m, i, cond_postprob, Ti, ind)\n\n\n\n## Early stopping using predictive distribution\ndata_pp &lt;- data %&gt;% group_by(n_max, n, r) %&gt;% summarise(pp=round(sum(cond_postprob*ind),6), \n                                                 stop_pp=ifelse(pp&gt;threshold_safety, 1, 0))\n\n\n\nstop_boundaries0 &lt;- data_pp %&gt;% filter(stop_pp==1) %&gt;%\n  group_by(n_max, n) %&gt;% summarise(r=min(r), stop=NULL)\nstop_boundaries0$p_max &lt;- p_max\nstop_boundaries0$theta_T &lt;- theta_T\nstop_boundaries0$threshold_safety &lt;- threshold_safety\nstop_boundaries0$prior_type &lt;- prior_type\nstop_boundaries &lt;- bind_rows(stop_boundaries, stop_boundaries0)\n\n\nstop_boundaries %&gt;% filter(n==12)\n\n\n# A tibble: 2 × 7\n# Groups:   n_max [1]\n  n_max     n     r p_max theta_T threshold_safety prior_type\n  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt;   &lt;dbl&gt;            &lt;dbl&gt; &lt;chr&gt;     \n1    24    12     4   0.2     0.6              0.8 Skeptical \n2    24    12     5   0.2     0.6              0.8 Neutral   \n\n\n\n6.1.4.1 Design prior choice\nThe design prior for the primary endpoint was chosen as based on clinical expert knowledge and available evidence. We assumed that the “true” TD proportion comes from a \\(Beta(1.2,10.8)\\) design prior which is centered at a TD proportion of 10% with a 90% uncertainty range from 0.9% to 26.6%. The probability that the discontinuation rate is larger than 20% is 12.2%. The design prior has weight of 12 patients, that is, half of planned patients in the experimental arm.\n\n\n\n\n\n\n\n\n\n\n\n6.1.4.2 Analysis prior choice\nAs analysis priors we decided for two scenarios.\n\nA skeptical Beta(2.4, 9.4) analysis prior for the experimental arm which is centered on a TD proportion of 20% with a probability of excessing 40% of \\(5.6\\)%.\nA neutral Beta(0.6, 5.4) analysis prior for the experimental arm which is centered on a discontinuation proportion of 10%.\n\n\n\n\n\n\n\n\n\n\n\n\n\n6.1.5 Simulation study\nWe set up simulation study to quantify operations characteristics\n\nProbability of stopping because of non-safety (stopping trial before \\(N_{max}\\) is reached),\nProbability of treatment discontinuation (declaring treatment discontinuation including \\(N_{max}\\)),\nExpected number of patients in experimental arm\n\nwith the following parameters\n\nBeta design priors: Boths arms: a=1.5, b=13.5. True \\(p_i\\) are drawn from the design priors,\nBeta analysis priors: Boths arms: Skeptical: a=2.4, b=9.6. Neutral: a=0.6, b=5.4,\nMaximal discontinuation proportion threshold \\(p_{max}\\): 0.2,\nNumber of randomised patients in the experimental arm at first interim analysis \\(n_1\\): 12,\nNumber of randomised patients in the control arm at first interim analysis \\(n_1\\): 6,\nExcessive discontinuation probability for posterior distribution \\(\\theta_{T}\\): 0.6,\nSafety threshold for predictive distribution \\(\\theta_{S}\\): 0.8,\nNumber of simulation runs: 10’000,\nMaximal sample size \\(N_{max}\\): 12/24 patients per arm,\nIncrease of sample size \\(n_{increase}\\): 6/12 patients per arm.",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-arm study with a binary primary outcome for assessing threshold stopping</span>"
+    ]
+  },
+  {
+    "objectID": "02-MethodsAnalysis.html#results",
+    "href": "02-MethodsAnalysis.html#results",
+    "title": "6  Two-arm study with a binary primary outcome for assessing threshold stopping",
+    "section": "6.2 Results",
+    "text": "6.2 Results\nThe results from our simulation study are:\n\n\n\n\n\n\n\nOperations characteristics\n\\(N_{max}=36\\)\n\n\n\n\nProbability of intolerable trial (skeptical prior)\n15.8%\n\n\nProbability of intolerable trial (neutral prior)\n8.2%\n\n\nProbability of early stopping because of non-safety\n7.7%\n\n\nExpected number of patients in experimental arm\n23.1\n\n\n\n\n\n\n\n\n\n\nStopping boundaries\n\n\n\n\n\nStopping boundary interim analysis (skeptical prior)\n4+\n\n\nIntolerable trial at trial end (skeptical prior)\n6+\n\n\nIntolerable trial at trial end (neutral prior)\n7+",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-arm study with a binary primary outcome for assessing threshold stopping</span>"
+    ]
+  },
+  {
+    "objectID": "02-MethodsAnalysis.html#author",
+    "href": "02-MethodsAnalysis.html#author",
+    "title": "6  Two-arm study with a binary primary outcome for assessing threshold stopping",
+    "section": "Author",
+    "text": "Author\nAndré Moser, Senior Statistician\nDepartment of Clinical Research\nUniversity of Bern\n3012 Bern, Switzerland\n\n\n\n\n1. Lee JJ, Liu DD. A predictive probability design for phase II cancer clinical trials. Clinical Trials. 2008;5: 93–106. doi:10.1177/1740774508089279\n\n\n2. Sambucini V. Efficacy and toxicity monitoring via bayesian predictive probabilities in phase II clinical trials. Statistical Methods & Applications. 2021;30: 637–663. doi:10.1007/s10260-020-00537-3",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Two-arm study with a binary primary outcome for assessing threshold stopping</span>"
+    ]
+  },
+  {
+    "objectID": "02-Methods.html",
+    "href": "02-Methods.html",
+    "title": "Methods",
+    "section": "",
+    "text": "This section covers specific methodological aspects of applied Bayesian analysis, include software and packages, and analysis examples.",
+    "crumbs": [
+      "Methods"
+    ]
+  },
+  {
+    "objectID": "02-Software.html#available-software",
+    "href": "02-Software.html#available-software",
+    "title": "5  Software and packages",
+    "section": "",
+    "text": "5.1.1 STAN\n(https://mc-stan.org/)",
+    "crumbs": [
+      "Methods",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Software and packages</span>"
     ]
   }
 ]
