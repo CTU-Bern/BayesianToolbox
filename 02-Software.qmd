@@ -4,13 +4,17 @@ Bayesian analysis faces non-trivial mathematical problems, for example, solution
 
 ## Available software
 
+### BUGS
+
+
+
 ### STAN
 
 (https://mc-stan.org/)
 
 ### JAGS
 
-JAGS is "Just Another Gibbs Sampler".
+JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BUGS language.
 
 ## Author {-}
 
