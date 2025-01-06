@@ -22,9 +22,16 @@ JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BU
 
 "Stan is a state-of-the-art platform for statistical modeling and high-performance statistical computation." ([https://mc-stan.org/](https://mc-stan.org/)) It uses a probabilistic programming language using MCMC sampling, approximate Bayesian inference and penalized maximum likelihood estimation.
 
-STAN interfaces with R using the package **rstan**. Regression approaches are implemented in **rstanarm** and **brms**.
+STAN interfaces with R using the package **rstan**. Regression approaches are implemented in the packages **rstanarm** and **brms**.
 
-## SCTO validation
+## Reproducibility and SCTO validation
+
+Reproducibility of MCMC results depend on several factors (see [https://mc-stan.org/docs/reference-manual/reproducibility.html](https://mc-stan.org/docs/reference-manual/reproducibility.html)), among others,
+
+- Operation system,
+- MCMC language, interface and version,
+- Versions of included libraries (Boost and Eigen),
+- C++ compiler, including version, compiler flags, and linked libraries.
 
 All above mentioned packages can be validated according to the guidelines of the SCTO validation platform ([https://swissclinicaltrialorganisation.github.io/validation_platform/](https://swissclinicaltrialorganisation.github.io/validation_platform/)).
 
