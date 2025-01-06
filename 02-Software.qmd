@@ -26,7 +26,7 @@ STAN interfaces with R using the package **rstan**. Regression approaches are im
 
 ## Reproducibility and SCTO validation
 
-Reproducibility of MCMC results depend on several factors (see [https://mc-stan.org/docs/reference-manual/reproducibility.html](https://mc-stan.org/docs/reference-manual/reproducibility.html)), among others,
+Reproducibility of MCMC results depends on several factors (see [https://mc-stan.org/docs/reference-manual/reproducibility.html](https://mc-stan.org/docs/reference-manual/reproducibility.html)), among others,
 
 - Operation system,
 - MCMC language, interface and version,

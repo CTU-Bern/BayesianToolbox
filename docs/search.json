@@ -599,7 +599,7 @@
     "href": "02-Software.html#reproducibility-and-scto-validation",
     "title": "5  Software and packages",
     "section": "5.2 Reproducibility and SCTO validation",
-    "text": "5.2 Reproducibility and SCTO validation\nReproducibility of MCMC results depend on several factors (see https://mc-stan.org/docs/reference-manual/reproducibility.html), among others,\n\nOperation system,\nMCMC language, interface and version,\nVersions of included libraries (Boost and Eigen),\nC++ compiler, including version, compiler flags, and linked libraries.\n\nAll above mentioned packages can be validated according to the guidelines of the SCTO validation platform (https://swissclinicaltrialorganisation.github.io/validation_platform/).",
+    "text": "5.2 Reproducibility and SCTO validation\nReproducibility of MCMC results depends on several factors (see https://mc-stan.org/docs/reference-manual/reproducibility.html), among others,\n\nOperation system,\nMCMC language, interface and version,\nVersions of included libraries (Boost and Eigen),\nC++ compiler, including version, compiler flags, and linked libraries.\n\nAll above mentioned packages can be validated according to the guidelines of the SCTO validation platform (https://swissclinicaltrialorganisation.github.io/validation_platform/).",
     "crumbs": [
       "Methods",
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Software and packages</span>"
