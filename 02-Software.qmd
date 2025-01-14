@@ -24,6 +24,329 @@ JAGS is "Just Another Gibbs Sampler" written in C++. JAGS is a dialect of the BU
 
 STAN interfaces with R using the package **rstan**. Regression approaches are implemented in the packages **rstanarm** and **brms**.
 
+## Evaluation
+
+We evaluated point estimates, uncertainty intervals and computational time of the above mentioned software approaches using simulated survival data. We assumed for 200 observations an exponential time to event assuming a hazard ratio of 0.6. 
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+library(brms)
+require(survival)
+require(ggplot2)
+library(splines)
+library(tidyverse)
+library(marginaleffects)
+library(tinytable)
+library(INLA)
+library(rstanarm)
+library(rjags)
+library(runjags)
+
+# Set seed
+set.seed(1)
+
+# Simulate survival data
+n <- 200
+hr <- 0.6
+
+rando <- rbinom(n, size = 1, prob = 0.5)
+cens <- 15*runif(n)
+h <- .1*exp(log(hr)*(rando == 1))
+dt <- -log(runif(n))/h
+event <- ifelse(dt <= cens,1,0)
+dt <- pmin(dt, cens)
+
+data <- data.frame(time = pmin(dt, cens), event, rando, id = 1:n)
+```
+
+The Kaplan-Meier plot is shown in the graph below
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+# Set significance level
+alpha <- 0.1
+
+# Kaplan-Meier
+mod_km <- survfit(Surv(time, event) ~ rando, data=data, conf.int = 1 - alpha)
+plot(mod_km, main = "Kaplan-Meier plot")
+```
+
+### Poisson count process: Frequentist approach
+
+We model the data in small pieces of follow-up time with a Poisson regression with offset, that is, we count the number of events in small follow-up time windows (i.e. event rate): A discrete Poisson process.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+# Split data set into small time windows
+data_split <- survSplit(Surv(time, event) ~., data=data, cut=seq(0, max(data$time), 0.5))
+data_split$fup <- data_split$time-data_split$tstart
+
+# Save spline and boundary knots information
+spline_info <- bs(data_split$time, df = 3)
+boundary_knots <- attr(spline_info, "Boundary.knots")
+
+# Attach splines to dataset
+data_split$spline_1 <- spline_info[,1]
+data_split$spline_2 <- spline_info[,2]
+data_split$spline_3 <- spline_info[,3]
+
+# Start computational time
+start_freq <- Sys.time()
+
+# Piecewise exponential model
+mod <- glm(event~rando+spline_1+spline_2+spline_3+
+             spline_1:rando+spline_2:rando+spline_3:rando+
+             offset(log(fup)), data=data_split, family=poisson())
+
+# End computational time
+end_freq <- Sys.time()
+
+# Computational time in seconds
+time_freq <- difftime(end_freq, start_freq, units = "secs")
+```
+
+The marginal hazard ratio is estimated as
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+
+# Marginal hazard ratio
+avg_comparisons(mod, variable="rando",
+                comparison = "ratio",
+                conf_level = 0.95)[,c("estimate", "conf.low", "conf.high")]
+```
+
+### Bayesian modelling: Priors
+
+In a Bayesian setting one defines prior distributions on the unknown parameters. In the above used Poisson regression model these are priors on
+
+- the log baseline hazard ("Intercept"),
+- the fixed effect parameters (on log scale) which includes at least a time variable (likely modelled in non-linear way) and a group variable.
+
+In the following we set the prior distribution of all above mentioned parameters to a centered Gaussian distribution with variance 10 (informative prior).
+
+### INLA
+
+In INLA the priors can be specified via the 'control.fixed' specification. Important: The scale parameter is expressed as a precision parameter.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+# Define priors
+inla_priors <- list(mean.intercept=0, prec.intercept=1/10, mean=0, prec=1/10)
+
+# Start computational time
+start_inla <- Sys.time()
+
+mod_inla <- inla(event~rando+spline_1+spline_2+spline_3+
+             spline_1:rando+spline_2:rando+spline_3:rando+offset(log(fup)), 
+               data=data_split, 
+               family="poisson", control.fixed=inla_priors,
+             control.compute=list(config = TRUE, return.marginals.predictor = T)
+             )
+
+# End computational time
+end_inla <- Sys.time()
+
+# Computational time in seconds
+time_inla <- difftime(end_inla, start_inla, units = "secs")
+```
+
+### Stan
+
+In Stan the priors can be specified via the 'prior' specification. Important: The scale parameter is expressed as standard deviation.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+
+### Define priors
+prior_brm <- c(prior_string("normal(0,sqrt(10))", class = "b", coef = "rando"),
+               prior_string("normal(0,sqrt(10))", class = "b", coef = "spline_1"),
+               prior_string("normal(0,sqrt(10))", class = "b", coef = "spline_2"),
+               prior_string("normal(0,sqrt(10))", class = "b", coef = "spline_3"),
+               prior_string("normal(0,sqrt(10))", class = "b", coef = "rando:spline_1"),
+               prior_string("normal(0,sqrt(10))", class = "b", coef = "rando:spline_2"),
+               prior_string("normal(0,sqrt(10))", class = "b", coef = "rando:spline_3"),
+               prior_string("normal(0,sqrt(10))", class = "Intercept"))
+
+# Seed
+seed <- 1
+
+# Start computational time
+start_brm <- Sys.time()
+
+mod_brm <- brm(event ~ rando+spline_1+spline_2+spline_3+
+             spline_1:rando+spline_2:rando+spline_3:rando+offset(log(fup)), 
+               data=data_split, 
+               family=poisson(), 
+               prior = prior_brm, 
+               seed=seed, 
+               silent= 2 , 
+               refresh = 0)
+
+# End computational time
+end_brm <- Sys.time()
+
+# Computational time in seconds
+time_brm <- difftime(end_brm, start_brm, units = "secs")
+
+# Summary
+summary_brm <- summary(mod_brm)
+
+# Start computational time
+start_rstanarm <- Sys.time()
+
+mod_rstanarm <- stan_glm(event ~ rando+spline_1+spline_2+spline_3+
+             spline_1:rando+spline_2:rando+spline_3:rando+offset(log(fup)), 
+               data=data_split, 
+               family=poisson(),
+                prior_intercept = normal(0, sqrt(10)),
+               prior = normal(0, sqrt(10)),
+             seed=seed,
+               refresh = 0)
+
+# End computational time
+end_rstanarm <- Sys.time()
+
+# Computational time in seconds
+time_rstanarm <- difftime(end_rstanarm, start_rstanarm, units = "secs")
+
+# Summary
+summary_rstanarm <- mod_rstanarm$stan_summary
+```
+
+### JAGS
+
+In JAGS the priors can be specified via the 'prior' specification. Important: The scale parameter is expressed as precision parameter.
+
+```{r}
+#| echo: true
+#| message: false
+#| warning: false
+#| cache: false
+
+# JAGS silent warnings
+runjags.options(silent.jags=T)
+
+# Prepare data
+jags_data <- list(y=data_split$event,
+                rando = data_split$rando,
+                spline_1 = data_split$spline_1,
+                spline_2 = data_split$spline_2,
+                spline_3 = data_split$spline_3,
+                spline_1_rando = data_split$spline_1*data_split$rando,
+                spline_2_rando = data_split$spline_2*data_split$rando,
+                spline_3_rando = data_split$spline_3*data_split$rando,
+                fup=data_split$fup,
+                n = nrow(data_split))
+ 
+
+# JAGS code
+jags.script <- "
+    model{
+    
+        # likelihood
+        for( i in 1:n) {
+            y[i] ~ dpois(lambda[i])
+            log(lambda[i]) <-   beta0 + 
+                                beta1*rando[i] + 
+                                beta2*spline_1[i] + 
+                                beta3*spline_2[i] + 
+                                beta4*spline_3[i] + 
+                                beta5*spline_1_rando[i] + 
+                                beta6*spline_2_rando[i] + 
+                                beta7*spline_3_rando[i] + 
+                                log(fup[i])
+        }
+    
+        # priors
+        beta0 ~ dnorm(0, 0.1)
+        beta1 ~ dnorm(0, 0.1)
+        beta2 ~ dnorm(0, 0.1)
+        beta3 ~ dnorm(0, 0.1)
+        beta4 ~ dnorm(0, 0.1)
+        beta5 ~ dnorm(0, 0.1)
+        beta6 ~ dnorm(0, 0.1)
+        beta7 ~ dnorm(0, 0.1)
+    }
+    "
+
+
+# Start computational time
+start_jags <- Sys.time()
+
+# Run the model
+mod_jags <- jags.model(textConnection(jags.script), 
+                   data = jags_data, 
+                   n.chains = 4,
+                   n.adapt = 4000,
+                   quiet = T)
+
+output_jags <- coda.samples(
+                    mod_jags,
+                    variable.names = c("beta0", "beta1", 
+                                       "beta2", "beta3",
+                                       "beta4", "beta5",
+                                       "beta6", "beta7"),
+                    n.iter=200)
+
+# Summary
+summary_jags <- summary(output_jags)
+
+# End computational time
+end_jags <- Sys.time()
+
+# Computational time
+time_jags <- difftime(end_jags, start_jags, units = "secs")
+```
+
+### Results
+
+We conclude that point estimates and credible intervals between the Bayesian software approaches are comparable. As expected, INLA outperforms the other Bayesian software approaches but only provides an approximation to the posterior distributions. Among the MCMC approaches, **rstanarm** reveals the best computational time.
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| cache: false
+
+output_all <- data.frame(type="INLA", var=dimnames(mod_inla$summary.fixed)[[1]], est=mod_inla$summary.fixed$mean, lci=mod_inla$summary.fixed$`0.025quant`, uci=mod_inla$summary.fixed$`0.975quant`, time=as.numeric(time_inla))
+
+output_all <- bind_rows(output_all, data.frame(type="Stan (brm)", var=dimnames(summary_brm$fixed)[[1]], est=summary_brm$fixed$Estimate, lci=summary_brm$fixed$`l-95% CI`, uci=summary_brm$fixed$`u-95% CI`, time=as.numeric(time_brm)))
+
+output_all <- bind_rows(output_all, data.frame(type="Stan (rstanarm)", var=dimnames(summary_rstanarm)[[1]][1:8], est=summary_rstanarm[1:8,"mean"], lci=summary_rstanarm[1:8,"2.5%"], uci=summary_rstanarm[1:8,"97.5%"], time=as.numeric(time_rstanarm)))
+
+output_all <- bind_rows(output_all, data.frame(type="JAGS", var=dimnames(summary_rstanarm)[[1]][1:8], est=summary_jags$statistics[, "Mean"], lci=summary_jags$quantiles[, "2.5%"], uci=summary_jags$quantiles[, "97.5%"], time=as.numeric(time_jags)))
+
+output_all <- bind_rows(output_all, data.frame(type="Frequentist", var=names(mod$coefficients), est=mod$coefficients, lci=confint.default(mod)[,1], uci=confint.default(mod)[,2], time=as.numeric(time_freq)))
+
+output_all$var[output_all$var=="(Intercept)"] <- "Intercept"
+
+ggplot(output_all, aes(x=var, y=est, colour=type))+geom_point(position=position_dodge2(width=0.5))+geom_linerange(aes(ymin=lci, ymax=uci), position=position_dodge2(width=0.5))+theme_bw()+theme(axis.text.x = element_text(angle=30, vjust = 1, hjust=1), panel.grid.minor = element_blank())+scale_colour_brewer("", palette="Dark2")+ylab("Estimate on log scale")+xlab("")+ggtitle("Point estimates and uncertainty intervals")
+
+time_all <- output_all |> group_by(type) |> summarise(time=first(time))
+time_all$type <- factor(time_all$type, levels=time_all$type[order(time_all$time)])
+
+ggplot(time_all, aes(x=type, y=time))+geom_point(position=position_dodge2(width=0.5))+theme_bw()+theme(axis.text.x = element_text(angle=30, vjust = 1, hjust=1), panel.grid.minor = element_blank())+scale_colour_brewer("", palette="Dark2")+ylab("Computational time (in seconds)")+xlab("Model type")+ggtitle("Computational time (in seconds)")
+```
+
+
 ## Reproducibility and SCTO validation
 
 Reproducibility of MCMC results depends on several factors (see [https://mc-stan.org/docs/reference-manual/reproducibility.html](https://mc-stan.org/docs/reference-manual/reproducibility.html)), among others,
